@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OpportunityController;
+use App\Http\Controllers\AdminController;
 
 
 Route::get('/', function () {
@@ -19,3 +20,5 @@ Route::middleware([
 });
 
 Route::resource('opportunities', OpportunityController::class)->middleware(['auth', 'verified']);
+
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->middleware(['auth', 'admin'])->name('admin.dashboard');
