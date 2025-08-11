@@ -48,10 +48,10 @@
     </aside>
 
     {{-- Main Content --}}
-    <main class="ml-[300px] p-6 w-full">
+    <main class="ml-[300px] p-6 w-auto h-auto">
         @yield('content')
     </main>
 </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
