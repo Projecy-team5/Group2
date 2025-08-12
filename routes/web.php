@@ -20,11 +20,13 @@ Route::middleware([
 
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->middleware(['auth', 'admin'])->name('admin.dashboard');
 
-// Routes for the scholarship admin panel
-Route::group(['middleware' => ['auth:sanctum', 'verified'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
-    // This GET route is for DISPLAYING the form.
-    Route::get('scholarships/create', [ScholarshipController::class, 'create'])->name('scholarships.create');
 
-    // This POST route is for SUBMITTING the form data.
-    Route::post('scholarships', [ScholarshipController::class, 'store'])->name('scholarships.store');
+Route::prefix('admin/scholarships')->name('admin.scholarships.')->group(function () {
+    Route::get('/', [ScholarshipController::class, 'index'])->name('index');
+    Route::get('/create', [ScholarshipController::class, 'create'])->name('create');
+    Route::post('/', [ScholarshipController::class, 'store'])->name('store');
+    Route::get('/{scholarship}/edit', [ScholarshipController::class, 'edit'])->name('edit');
+    Route::put('/{scholarship}', [ScholarshipController::class, 'update'])->name('update');
+    Route::delete('/{scholarship}', [ScholarshipController::class, 'destroy'])->name('destroy');
+    Route::get('/{scholarship}', [ScholarshipController::class, 'show'])->name('show');
 });
