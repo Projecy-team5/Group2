@@ -5,80 +5,71 @@
     <div class="space-y-4">
         <div class="flex items-center py-2 justify-between gap-4">
             <div class="flex items-center gap-4 flex-1">
-                <h1 class="text-3xl font-bold text-gray-900">Scholarships Management</h1>
+                <h1 class="text-3xl font-bold text-gray-900">Users Management</h1>
             </div>
             <div class="space-x-2">
-                <a href="{{ route('admin.scholarships.create') }}" class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-8 rounded-md px-3 text-xs">
+                <a href="{{ route('admin.users.create') }}" class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-8 rounded-md px-3 text-xs">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus h-4 w-4" aria-hidden="true">
                         <path d="M5 12h14"></path>
                         <path d="M12 5v14"></path>
                     </svg>
-                    Add Scholarship
+                    Add User
                 </a>
             </div>
         </div>
     </div>
-    
+
     <div class="rounded-md border">
         <div class="relative w-full overflow-auto">
             <table class="w-full caption-bottom text-sm">
                 <thead class="[&_tr]:border-b">
                     <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Scholarship Name</th>
-                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Award Amount</th>
-                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Country</th>
-                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Status</th>
-                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Deadline</th>
+                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Profile</th>
+                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Name</th>
+                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Email</th>
+                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">Created</th>
                         <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 w-[100px]">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="[&_tr:last-child]:border-0">
-                    @forelse($scholarships as $scholarship)
+                    @foreach($users as $user)
                     <tr class="border-b data-[state=selected]:bg-muted hover:bg-gray-50 transition-colors duration-200">
-                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-semibold text-gray-900">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-lg shadow-sm border border-gray-200 flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap h-5 w-5 text-indigo-600" aria-hidden="true">
-                                        <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path>
-                                        <path d="M22 10v6"></path>
-                                        <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
-                                    </svg>
+                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                            <div class="flex items-center justify-center">
+                                <div class="relative">
+                                    @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                                        <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" class="w-12 h-12 object-cover rounded-full shadow-sm border border-gray-200">
+                                    @else
+                                        <div class="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full shadow-sm border border-gray-200 flex items-center justify-center">
+                                            <span class="text-blue-600 font-medium text-lg">{{ substr($user->name, 0, 1) }}</span>
+                                        </div>
+                                    @endif
                                 </div>
-                                <div class="truncate max-w-[250px]" title="{{ $scholarship->scholarship_name }}">{{ $scholarship->scholarship_name }}</div>
                             </div>
+                        </td>
+                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-semibold text-gray-900">
+                            <div class="truncate max-w-[200px]" title="{{ $user->name }}">{{ $user->name }}</div>
                         </td>
                         <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
                             <div class="flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-dollar-sign h-4 w-4 text-green-500" aria-hidden="true">
-                                    <line x1="12" x2="12" y1="2" y2="22"></line>
-                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail h-4 w-4 text-gray-500" aria-hidden="true">
+                                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                                    <path d="m22 7-10 5L2 7"></path>
                                 </svg>
-                                <span class="font-medium text-gray-700">${{ number_format($scholarship->award_amount) }}</span>
+                                <span class="text-gray-700">{{ $user->email }}</span>
                             </div>
                         </td>
-                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
-                            <div class="flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin h-4 w-4 text-blue-500" aria-hidden="true">
-                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
-                                    <circle cx="12" cy="10" r="3"></circle>
-                                </svg>
-                                <span class="text-gray-700">{{ $scholarship->country }}</span>
-                            </div>
-                        </td>
-                        <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
-                            @php
-                                $isActive = \Carbon\Carbon::parse($scholarship->application_deadline)->isFuture();
-                            @endphp
-                            @if($isActive)
+                        {{-- <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                            @if($user->status === 'active')
                                 <div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-green-700 border-green-300 bg-green-50 font-medium">
                                     ● Active
                                 </div>
                             @else
                                 <div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-red-700 border-red-300 bg-red-50 font-medium">
-                                    ● Expired
+                                    ● Inactive
                                 </div>
                             @endif
-                        </td>
+                        </td> --}}
                         <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
                             <div class="flex items-center gap-2 text-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar h-4 w-4 text-purple-500" aria-hidden="true">
@@ -87,12 +78,12 @@
                                     <rect width="18" height="18" x="3" y="4" rx="2"></rect>
                                     <path d="M3 10h18"></path>
                                 </svg>
-                                <span class="text-gray-600">{{ \Carbon\Carbon::parse($scholarship->application_deadline)->format('n/j/Y') }}</span>
+                                <span class="text-gray-600">{{ $user->created_at->format('n/j/Y') }}</span>
                             </div>
                         </td>
                         <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
                             <div class="flex items-center gap-2">
-                                <a href="{{ route('admin.scholarships.show', $scholarship) }}">
+                                <a href="{{ route('admin.users.show', $user) }}">
                                     <button class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-8 rounded-md px-3 text-xs">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye h-4 w-4 mr-1" aria-hidden="true">
                                             <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
@@ -101,7 +92,7 @@
                                         View
                                     </button>
                                 </a>
-                                <a href="{{ route('admin.scholarships.edit', $scholarship) }}">
+                                <a href="{{ route('admin.users.edit', $user) }}">
                                     <button class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-8 rounded-md px-3 text-xs">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen h-4 w-4 mr-1" aria-hidden="true">
                                             <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -110,7 +101,7 @@
                                         Edit
                                     </button>
                                 </a>
-                                <form action="{{ route('admin.scholarships.destroy', $scholarship) }}" method="POST" class="inline delete-form">
+                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline delete-form">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-accent h-8 rounded-md px-3 text-xs text-red-600 hover:text-red-700" onclick="showDeleteModal(this.form)">
@@ -127,30 +118,15 @@
                             </div>
                         </td>
                     </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="p-8 text-center text-gray-500">
-                            <div class="flex flex-col items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-graduation-cap h-8 w-8 text-gray-400">
-                                    <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path>
-                                    <path d="M22 10v6"></path>
-                                    <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
-                                </svg>
-                                <span>No scholarships found</span>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
-    
-    @if(method_exists($scholarships, 'links'))
+
     <div class="mt-6">
-        {{ $scholarships->links() }}
+        {{ $users->links() }}
     </div>
-    @endif
 </div>
 
 <!-- Delete Confirmation Modal -->

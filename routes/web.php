@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\ScholarshipController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::get('/', function () {
     return view('home');
@@ -29,4 +30,14 @@ Route::prefix('admin/scholarships')->name('admin.scholarships.')->group(function
     Route::put('/{scholarship}', [ScholarshipController::class, 'update'])->name('update');
     Route::delete('/{scholarship}', [ScholarshipController::class, 'destroy'])->name('destroy');
     Route::get('/{scholarship}', [ScholarshipController::class, 'show'])->name('show');
+});
+
+Route::prefix('admin/users')->name('admin.users.')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('index');
+    Route::get('/create', [UserController::class, 'create'])->name('create');
+    Route::post('/', [UserController::class, 'store'])->name('store');
+    Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
+    Route::put('/{user}', [UserController::class, 'update'])->name('update');
+    Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+    Route::get('/{user}', [UserController::class, 'show'])->name('show');
 });
