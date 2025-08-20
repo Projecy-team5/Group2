@@ -79,7 +79,7 @@
                                             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                         </svg>
                                         <span
-                                            class="font-medium text-gray-700">${{ number_format($scholarship->award_amount) }}</span>
+                                            class="font-medium text-gray-700">${{ ($scholarship->award_amount) }}</span>
                                     </div>
                                 </td>
                                 <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
