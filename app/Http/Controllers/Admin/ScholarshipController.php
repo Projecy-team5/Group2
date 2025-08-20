@@ -13,7 +13,7 @@ class ScholarshipController extends Controller
      */
     public function index()
     {
-        $scholarships = Scholarship::all();
+        $scholarships = Scholarship::paginate(10);
         return view('admin.scholarships.index', compact('scholarships'));
     }
     public function create()
@@ -44,6 +44,7 @@ class ScholarshipController extends Controller
             'country' => 'required|string|max:255',
             'application_requirements' => 'required|array',
             'application_deadline' => 'required|date|after:today',
+            'status' => 'required|in:active,inactive,closed',
         ]);
 
         // 2. Create a new scholarship instance with the validated data
@@ -55,12 +56,13 @@ class ScholarshipController extends Controller
         $scholarship->country = $validatedData['country'];
         $scholarship->application_requirements = $validatedData['application_requirements'];
         $scholarship->application_deadline = $validatedData['application_deadline'];
+        $scholarship->status = $validatedData['status'];
 
         // 3. Save the scholarship to the database
         $scholarship->save();
 
-        // 4. Redirect the user back with a success message
-        return redirect()->route('admin.scholarships.create')->with('success', 'Scholarship created successfully!');
+        // 4. Redirect the user to the index page with a success message
+        return redirect()->route('admin.scholarships.index')->with('success', 'Scholarship created successfully!');
     }
     public function destroy(Scholarship $scholarship)
     {
@@ -77,6 +79,7 @@ class ScholarshipController extends Controller
             'application_description' => 'required|string',
             'application_requirements' => 'required|array|min:1',
             'application_deadline' => 'required|date|after:today',
+            'status' => 'required|in:active,inactive,closed',
         ]);
 
         $scholarship->update($validated);

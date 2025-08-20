@@ -22,6 +22,7 @@ class Scholarship extends Model
         'application_description',
         'application_requirements', // Make sure this is in your fillable array
         'application_deadline',
+        'status',
     ];
 
     /**
