@@ -22,7 +22,7 @@ Route::middleware([
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->middleware(['auth', 'admin'])->name('admin.dashboard');
 
 
-Route::prefix('admin/scholarships')->name('admin.scholarships.')->group(function () {
+Route::prefix('admin/scholarships')->name('admin.scholarships.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [ScholarshipController::class, 'index'])->name('index');
     Route::get('/create', [ScholarshipController::class, 'create'])->name('create');
     Route::post('/', [ScholarshipController::class, 'store'])->name('store');
@@ -32,7 +32,7 @@ Route::prefix('admin/scholarships')->name('admin.scholarships.')->group(function
     Route::get('/{scholarship}', [ScholarshipController::class, 'show'])->name('show');
 });
 
-Route::prefix('admin/users')->name('admin.users.')->group(function () {
+Route::prefix('admin/users')->name('admin.users.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('index');
     Route::get('/create', [UserController::class, 'create'])->name('create');
     Route::post('/', [UserController::class, 'store'])->name('store');
