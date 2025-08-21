@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\ScholarshipController;
 use App\Http\Controllers\Admin\UserController;
 
 Route::get('/', function () {
-    return view('home');
+    return view('frontend/home');
 });
 
 Route::middleware([
