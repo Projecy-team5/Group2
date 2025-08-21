@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="bg-green-50 border border-green-200 rounded-lg p-3">
                                         <p class="text-2xl font-bold text-green-800">
-                                            ${{ number_format($scholarship->award_amount, 2) }}</p>
+                                            ${{ $scholarship->award_amount}}</p>
                                     </div>
                                 </div>
                                 <div class="group">
@@ -84,13 +84,13 @@
                                         <span class="text-sm font-medium text-gray-700">Status</span>
                                     </div>
                                     <div class="
-                                        @if($scholarship->status === 'active') bg-green-50 border border-green-200 
-                                        @elseif($scholarship->status === 'inactive') bg-yellow-50 border border-yellow-200 
+                                        @if($scholarship->status === 'active') bg-green-50 border border-green-200
+                                        @elseif($scholarship->status === 'inactive') bg-yellow-50 border border-yellow-200
                                         @else bg-red-50 border border-red-200 @endif
                                         rounded-lg p-3">
                                         <p class="text-lg font-semibold capitalize
-                                            @if($scholarship->status === 'active') text-green-800 
-                                            @elseif($scholarship->status === 'inactive') text-yellow-800 
+                                            @if($scholarship->status === 'active') text-green-800
+                                            @elseif($scholarship->status === 'inactive') text-yellow-800
                                             @else text-red-800 @endif">
                                             {{ $scholarship->status }}
                                         </p>
