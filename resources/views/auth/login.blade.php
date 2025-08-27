@@ -1,99 +1,115 @@
-{{-- <x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
-        <x-validation-errors class="mb-4" />
-        @session('status')
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ $value }}
-            </div>
-        @endsession
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-            <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            </div>
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
-            </div>
-            <div class="flex items-center justify-between mt-4">
-                <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-            </div>
-            <div class="flex items-center justify-end mt-4">
-                <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150" style="margin-right: 5px;">
-                    {{ __('Register') }}
-                </a>
-                <x-button class="ms-4">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout> --}}
-<x-guest-layout>
-    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-indigo-100">
-        <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-            <div class="flex justify-center mb-6">
-                <x-authentication-card-logo class="w-16 h-16" />
-            </div>
-            <h2 class="text-center text-2xl font-bold text-gray-800 mb-6">
-                {{ __('Welcome Back') }}
-            </h2>
-            <x-validation-errors class="mb-4" />
-            @session('status')
-                <div
-                    class="mb-4 text-sm font-medium text-green-600 bg-green-100 border border-green-200 rounded-lg p-3 text-center">
-                    {{ $value }}
+@extends('layouts.homepage')
+
+@section('content')
+    <div class="min-h-screen flex items-center justify-center ">
+        <!-- Login Card -->
+        <div class="w-full max-w-md sm:max-w-lg px-4 sm:px-6 animate-fade-in">
+            <!-- Glass morphism card -->
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl shadow-md border border-gray-200/20 p-6 relative">
+                <!-- Content -->
+                <div class="relative z-10">
+                    <!-- Logo -->
+                    <div class="flex justify-center mb-6">
+                        <div class="w-14 h-14 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-sm">
+                            <x-authentication-card-logo class="w-8 h-8 text-gray-900" />
+                        </div>
+                    </div>
+
+                    <!-- Welcome Text -->
+                    <div class="text-center mb-6">
+                        <h2 class="text-2xl sm:text-3xl font-semibold text-gray-900 font-[Inter,Figtree,sans-serif]">
+                            {{ __('Welcome Back') }}
+                        </h2>
+                        <p class="text-gray-700 text-sm font-normal font-[Inter,Figtree,sans-serif] mt-1">
+                            {{ __('Sign in to your account') }}
+                        </p>
+                    </div>
+
+                    <!-- Validation Errors -->
+                    <x-validation-errors class="mb-4" />
+
+                    <!-- Status Message -->
+                    @session('status')
+                        <div class="mb-4 text-sm font-medium text-green-800 bg-green-100/80 backdrop-blur-sm border border-green-200/30 rounded-lg p-3 text-center shadow-sm">
+                            {{ $value }}
+                        </div>
+                    @endsession
+
+                    <!-- Login Form -->
+                    <form method="POST" action="{{ route('login') }}" class="space-y-3">
+                        @csrf
+
+                        <!-- Email Field -->
+                        <div class="space-y-1">
+                            <x-label for="email" value="{{ __('Email Address') }}" class="text-gray-900 font-medium text-sm font-[Inter,Figtree,sans-serif]" />
+                            <x-input id="email"
+                                class="w-full h-10 bg-white/10 backdrop-blur-sm border border-gray-200/30 rounded-lg px-4 text-gray-900 placeholder-gray-500 focus:border-indigo-600 transition-all duration-200 text-sm"
+                                type="email"
+                                name="email"
+                                :value="old('email')"
+                                required
+                                autofocus
+                                autocomplete="username"
+                                placeholder="Enter your email" />
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="space-y-1">
+                            <x-label for="password" value="{{ __('Password') }}" class="text-gray-900 font-medium text-sm font-[Inter,Figtree,sans-serif]" />
+                            <x-input id="password"
+                                class="w-full h-10 bg-white/10 backdrop-blur-sm border border-gray-200/30 rounded-lg px-4 text-gray-900 placeholder-gray-500 focus:border-indigo-600 transition-all duration-200 text-sm"
+                                type="password"
+                                name="password"
+                                required
+                                autocomplete="current-password"
+                                placeholder="Enter your password" />
+                        </div>
+
+                        <!-- Remember Me & Forgot Password -->
+                        <div class="flex items-center justify-between py-2">
+                            <label for="remember_me" class="flex items-center group cursor-pointer">
+                                <x-checkbox id="remember_me"
+                                    name="remember"
+                                    class="rounded bg-white/10 border-gray-200/30 text-indigo-600 focus:ring-indigo-600 focus:ring-1" />
+                                <span class="ml-2 text-sm text-gray-700 font-normal group-hover:text-gray-900 transition-colors font-[Inter,Figtree,sans-serif]">
+                                    {{ __('Remember me') }}
+                                </span>
+                            </label>
+                            @if (Route::has('password.request'))
+                                <a href="{{ route('password.request') }}"
+                                    class="text-sm text-gray-700 hover:text-indigo-600 transition-colors hover:underline font-[Inter,Figtree,sans-serif]">
+                                    {{ __('Forgot password?') }}
+                                </a>
+                            @endif
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex gap-3 pt-3">
+                            <!-- Register Button -->
+                            <a href="{{ route('register') }}"
+                                class="flex-1 h-10 bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-gray-200/30 text-gray-900 font-medium rounded-lg transition-all duration-200 flex items-center justify-center text-sm">
+                                {{ __('Register') }}
+                            </a>
+
+                            <!-- Login Button -->
+                            <x-button class="flex-1 h-10 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-all duration-200 text-sm">
+                                {{ __('Log in') }}
+                            </x-button>
+                        </div>
+                    </form>
                 </div>
-            @endsession
-            <form method="POST" action="{{ route('login') }}" class="space-y-5">
-                @csrf
-                <div>
-                    <x-label for="email" value="{{ __('Email Address') }}" class="text-gray-700 font-semibold" />
-                    <x-input id="email"
-                        class="mt-2 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-                </div>
-                <div>
-                    <x-label for="password" value="{{ __('Password') }}" class="text-gray-700 font-semibold" />
-                    <x-input id="password"
-                        class="mt-2 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                        type="password" name="password" required autocomplete="current-password" />
-                </div>
-                <div class="flex items-center justify-between">
-                    <label for="remember_me" class="flex items-center">
-                        <x-checkbox id="remember_me" name="remember"
-                            class="rounded text-indigo-600 focus:ring-indigo-500" />
-                        <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                    </label>
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}"
-                            class="text-sm font-medium text-indigo-600 hover:text-indigo-800">
-                            {{ __('Forgot password?') }}
-                        </a>
-                    @endif
-                </div>
-                <div class="flex items-center justify-between pt-4">
-                    <a href="{{ route('register') }}"
-                        class="px-4 py-2.5 w-1/2 text-center bg-gray-100 text-gray-800 font-semibold rounded-lg shadow-sm hover:bg-gray-200 transition">
-                        {{ __('Register') }}
-                    </a>
-                    <x-button class="w-1/2 ms-3 py-2.5 flex justify-center items-center rounded-lg">
-                        {{ __('Log in') }}
-                    </x-button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</x-guest-layout>
+
+    <!-- Custom CSS for animations -->
+    <style>
+        @keyframes fade-in {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.6s ease-out forwards;
+        }
+    </style>
+@endsection
