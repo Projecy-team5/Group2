@@ -63,7 +63,9 @@
         </form>
     </x-authentication-card>
 </x-guest-layout> --}}
-<x-guest-layout>
+@extends('layouts.homepage')
+
+@section('content')
     <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-indigo-100">
         <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
             <div class="flex justify-center mb-6">
@@ -134,4 +136,4 @@
             </form>
         </div>
     </div>
-</x-guest-layout>
+@endsection
