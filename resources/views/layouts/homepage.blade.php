@@ -10,6 +10,7 @@
         body { font-family: 'Inter', sans-serif; }
         .text-gradient {
             background: linear-gradient(135deg, #5a67d8 0%, #9f7aea 100%);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -186,10 +187,193 @@
         </div>
     </footer>
 
+    {{-- CHAT WIDGET --}}
+    <div id="chat-widget" class="fixed bottom-6 right-6 z-50">
+        {{-- Chat Toggle Button --}}
+        <button id="chat-toggle" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+            <svg id="chat-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+            <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+
+        {{-- Chat Container --}}
+        <div id="chat-container" class="hidden absolute bottom-16 right-0 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden">
+            {{-- Chat Header --}}
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold">AI Assistant</h3>
+                            <p class="text-sm text-indigo-100">Ask me about scholarships!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Chat Messages --}}
+            <div id="chatbox" class="h-80 overflow-y-auto p-4 space-y-3 bg-gray-50">
+                <div class="flex items-start space-x-2">
+                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <div class="bg-white rounded-lg p-3 shadow-sm max-w-xs">
+                        <p class="text-sm text-gray-800">Hello! I'm here to help you find scholarships and answer any questions you might have. How can I assist you today?</p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Chat Input --}}
+            <div class="p-4 bg-white border-t border-gray-200">
+                <div class="flex space-x-2">
+                    <input id="userInput" type="text" placeholder="Type your message..."
+                           class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm">
+                    <button onclick="sendMessage()"
+                            class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Mobile menu toggle
         document.getElementById('mobile-menu-button').addEventListener('click', () => {
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
+        });
+
+        // Chat widget toggle
+        document.getElementById('chat-toggle').addEventListener('click', () => {
+            const container = document.getElementById('chat-container');
+            const chatIcon = document.getElementById('chat-icon');
+            const closeIcon = document.getElementById('close-icon');
+
+            container.classList.toggle('hidden');
+            chatIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        });
+
+        // Chat functionality
+        async function sendMessage() {
+            let input = document.getElementById('userInput');
+            let message = input.value.trim();
+            if (!message) return;
+
+            let chatbox = document.getElementById('chatbox');
+
+            // Add user message
+            chatbox.innerHTML += `
+                <div class="flex items-start space-x-2 justify-end">
+                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg p-3 max-w-xs">
+                        <p class="text-sm">${message}</p>
+                    </div>
+                    <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </div>
+                </div>
+            `;
+
+            // Add loading indicator
+            chatbox.innerHTML += `
+                <div class="flex items-start space-x-2">
+                    <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <div class="bg-white rounded-lg p-3 shadow-sm max-w-xs">
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            input.value = "";
+            chatbox.scrollTop = chatbox.scrollHeight;
+
+            try {
+                let res = await fetch("/chatbot", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({ message })
+                });
+
+                console.log('Response status:', res.status);
+                console.log('Response headers:', res.headers);
+
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+
+                let data = await res.json();
+                console.log('Response data:', data);
+
+                // Remove loading indicator
+                chatbox.removeChild(chatbox.lastElementChild);
+
+                // Add bot response
+                chatbox.innerHTML += `
+                    <div class="flex items-start space-x-2">
+                        <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 shadow-sm max-w-xs">
+                            <p class="text-sm text-gray-800">${data.reply || 'No response received'}</p>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Chat error:', error);
+
+                // Remove loading indicator
+                chatbox.removeChild(chatbox.lastElementChild);
+
+                // Add error message
+                chatbox.innerHTML += `
+                    <div class="flex items-start space-x-2">
+                        <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 shadow-sm max-w-xs">
+                            <p class="text-sm text-gray-800">Error: ${error.message}. Please try again later.</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        // Allow sending message with Enter key
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
         });
     </script>
 </body>

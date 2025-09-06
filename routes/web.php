@@ -5,11 +5,26 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\ScholarshipController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FrontendScholarshipController;
-
+use App\Http\Controllers\GeminiController;
 Route::get('/', function () {
     return view('frontend/home');
 });
+Route::post('/chatbot', [GeminiController::class, 'handle'])->middleware('web');
+Route::get('/test-chat', function () {
+    $apiKey = env('GOOGLE_API_KEY');
+    return response()->json([
+        'api_key_configured' => !empty($apiKey),
+        'api_key_length' => $apiKey ? strlen($apiKey) : 0,
+        'api_key_preview' => $apiKey ? substr($apiKey, 0, 10) . '...' : 'Not set'
+    ]);
+});
 
+Route::get('/test-chatbot', function () {
+    $controller = new \App\Http\Controllers\GeminiController();
+    $request = new \Illuminate\Http\Request();
+    $request->merge(['message' => 'Hello, test message']);
+    return $controller->handle($request);
+});
 Route::get('/scholarships', [FrontendScholarshipController::class, 'index'])->name('scholarships.index');
 Route::get('/scholarships/{scholarship}', [FrontendScholarshipController::class, 'show'])->name('scholarships.show');
 
