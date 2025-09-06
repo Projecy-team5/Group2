@@ -23,6 +23,7 @@ class ScholarshipController extends Controller
     public function show(Scholarship $scholarship)
     {
         return view('admin.scholarships.show', compact('scholarship'));
+
     }
     // Show edit form
     public function edit(Scholarship $scholarship)

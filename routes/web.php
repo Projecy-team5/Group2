@@ -4,10 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\ScholarshipController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\FrontendScholarshipController;
 
 Route::get('/', function () {
     return view('frontend/home');
 });
+
+Route::get('/scholarships', [FrontendScholarshipController::class, 'index'])->name('scholarships.index');
+Route::get('/scholarships/{scholarship}', [FrontendScholarshipController::class, 'show'])->name('scholarships.show');
 
 Route::middleware([
     'auth:sanctum',

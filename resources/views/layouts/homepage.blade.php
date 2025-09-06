@@ -71,7 +71,7 @@
                     <div class="hidden md:block ml-12">
                         <div class="flex space-x-8">
                             <a href="{{ url('/') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Home</a>
-                            <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Scholarships</a>
+                            <a href="{{ url('/scholarships') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Scholarships</a>
                             <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">About</a>
                             <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Resources</a>
                             <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Contact</a>
