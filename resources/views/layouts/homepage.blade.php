@@ -68,10 +68,10 @@
             <div class="flex justify-between items-center h-16">
                 {{-- Left --}}
                 <div class="flex items-center">
-                    <h1 class="text-2xl sm:text-3xl font-extrabold text-gradient">ScholarshipHub</h1>
+                    <a href="{{ url(path: '/') }}" class="text-2xl sm:text-3xl font-extrabold text-gradient">ScholarshipHub</a>
                     <div class="hidden md:block ml-12">
                         <div class="flex space-x-8">
-                            <a href="{{ url('/') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Home</a>
+                            <a href="{{ url(path: '/') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Home</a>
                             <a href="{{ url('/scholarships') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Scholarships</a>
                             <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">About</a>
                             <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Resources</a>
@@ -88,23 +88,35 @@
                     @endguest
 
                     @auth
-                        {{-- Profile dropdown --}}
-                        <div class="relative group">
-                            <button class="flex items-center space-x-2 focus:outline-none">
-                                <img src="{{ Auth::user()->profile_photo_url ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name) }}"
-                                     alt="Profile" class="w-9 h-9 rounded-full border border-gray-300 shadow-sm hover:scale-105 transition-transform duration-300">
-                                <span class="hidden sm:block text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
-                            </button>
-                            {{-- Dropdown --}}
-                            <div class="dropdown hidden absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-100">
-                                <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">Profile</a>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">Logout</button>
-                                </form>
-                            </div>
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
+                            <img src="{{ Auth::user()->profile_photo_url ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name) }}"
+                                alt="Profile"
+                                class="w-9 h-9 rounded-full border border-gray-300 shadow-sm hover:scale-105 transition-transform duration-300">
+                            <span class="hidden sm:block text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
+                        </button>
+
+                        {{-- Dropdown --}}
+                        <div x-show="open"
+                            @click.away="open = false"
+                            x-transition
+                            class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-100 z-50">
+                            <a href="{{ route('profile.show') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                            Profile
+                            </a>
+
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit"
+                                        class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                                    Logout
+                                </button>
+                            </form>
                         </div>
+                    </div>
                     @endauth
+
 
                     {{-- Mobile Menu Button --}}
                     <div class="md:hidden">
