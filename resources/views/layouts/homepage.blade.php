@@ -143,7 +143,7 @@
     </nav>
 
     {{-- MAIN CONTENT --}}
-    <main class="flex-1 max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-slide-up">
+    <main class="flex-1 animate-slide-up">
         @yield('content')
     </main>
 
