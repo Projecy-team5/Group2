@@ -9,6 +9,12 @@ use App\Http\Controllers\GeminiController;
 Route::get('/', function () {
     return view('frontend/home');
 });
+
+Route::get('/about', function () {
+    return view('frontend/about');
+});
+
+
 Route::post('/chatbot', [GeminiController::class, 'handle'])->middleware('web');
 Route::get('/test-chat', function () {
     $apiKey = env('GOOGLE_API_KEY');

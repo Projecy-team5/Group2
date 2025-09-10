@@ -73,7 +73,7 @@
                         <div class="flex space-x-8">
                             <a href="{{ url(path: '/') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Home</a>
                             <a href="{{ url('/scholarships') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Scholarships</a>
-                            <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">About</a>
+                            <a href="{{ url('/about') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">About</a>
                             <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Resources</a>
                             <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Contact</a>
                         </div>
@@ -134,7 +134,7 @@
                 <div class="px-4 py-4 space-y-2">
                     <a href="{{ url('/') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Home</a>
                     <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Scholarships</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">About</a>
+                    <a href="{{ url('/about') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">About</a>
                     <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Resources</a>
                     <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Contact</a>
                 </div>
