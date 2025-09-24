@@ -89,7 +89,7 @@
                             <tr
                                 class="border-b data-[state=selected]:bg-muted hover:bg-gray-50 transition-colors duration-200">
                                 <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0 font-semibold text-gray-900">
-                                    #{{ $user->id }}
+                                    {{ $user->id }}
                                 </td>
                                 <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
                                     <div class="flex items-center gap-3">
@@ -151,56 +151,72 @@
                                     </div>
                                 </td>
                                 <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
-                                    <div class="flex items-center gap-2">
-                                        <a href="{{ route('admin.users.show', $user) }}">
-                                            <button
-                                                class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 hover:shadow-md h-8 rounded-md px-3 text-xs">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="lucide lucide-eye h-4 w-4 mr-1" aria-hidden="true">
-                                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-                                                    <circle cx="12" cy="12" r="3"></circle>
-                                                </svg>
-                                                View
-                                            </button>
-                                        </a>
-                                        <a href="{{ route('admin.users.edit', $user) }}">
-                                            <button
-                                                class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-green-50 hover:text-green-700 hover:border-green-200 hover:shadow-md h-8 rounded-md px-3 text-xs">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="lucide lucide-square-pen h-4 w-4 mr-1" aria-hidden="true">
-                                                    <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7">
-                                                    </path>
-                                                    <path
-                                                        d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z">
-                                                    </path>
-                                                </svg>
-                                                Edit
-                                            </button>
-                                        </a>
-                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
-                                            class="inline delete-form">
-                                            @csrf
-                                            @method('DELETE')
+                                    <div class="relative inline-block text-left">
+                                        <div>
                                             <button type="button"
-                                                class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-red-50 hover:text-red-700 hover:border-red-200 hover:shadow-md h-8 rounded-md px-3 text-xs text-red-600"
-                                                onclick="showDeleteModal(this.form)">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="lucide lucide-trash2 h-4 w-4 mr-1" aria-hidden="true">
-                                                    <path d="M10 11v6"></path>
-                                                    <path d="M14 11v6"></path>
-                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
-                                                    <path d="M3 6h18"></path>
-                                                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                class="inline-flex items-center justify-center w-8 h-8 text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                onclick="toggleDropdown('dropdown-{{ $user->id }}', this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="12" r="1"></circle>
+                                                    <circle cx="12" cy="5" r="1"></circle>
+                                                    <circle cx="12" cy="19" r="1"></circle>
                                                 </svg>
-                                                Delete
                                             </button>
-                                        </form>
+                                        </div>
+                                        <div id="dropdown-{{ $user->id }}"
+                                            class="hidden fixed z-50 w-48 bg-white border border-gray-200 rounded-md shadow-lg"
+                                            onclick="event.stopPropagation()"
+                                            style="display: none;">
+                                            <div class="py-1">
+                                                <a href="{{ route('admin.users.show', $user) }}"
+                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="mr-2">
+                                                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                                                        <circle cx="12" cy="12" r="3"></circle>
+                                                    </svg>
+                                                    View Details
+                                                </a>
+                                                <a href="{{ route('admin.users.edit', $user) }}"
+                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="mr-2">
+                                                        <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7">
+                                                        </path>
+                                                        <path
+                                                            d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z">
+                                                        </path>
+                                                    </svg>
+                                                    Edit User
+                                                </a>
+                                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
+                                                    class="delete-form">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button"
+                                                        class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700"
+                                                        onclick="showDeleteModal(this.form)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                            class="mr-2">
+                                                            <path d="M10 11v6"></path>
+                                                            <path d="M14 11v6"></path>
+                                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                                                            <path d="M3 6h18"></path>
+                                                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                        </svg>
+                                                        Delete User
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -225,4 +241,75 @@
         @endif
     </div>
     <x-delete-confirmation />
+    <x-toast />
+
+    <script>
+    function toggleDropdown(dropdownId, buttonElement) {
+        event.stopPropagation();
+        
+        // Close all other dropdowns first
+        document.querySelectorAll('[id^="dropdown-"]').forEach(dropdown => {
+            if (dropdown.id !== dropdownId) {
+                dropdown.classList.add('hidden');
+                dropdown.style.display = 'none';
+            }
+        });
+        
+        // Get the clicked dropdown
+        const dropdown = document.getElementById(dropdownId);
+        const button = buttonElement || event.target.closest('button');
+        
+        if (dropdown.classList.contains('hidden')) {
+            // Position the dropdown
+            const buttonRect = button.getBoundingClientRect();
+            const dropdownWidth = 192; // w-48 = 12rem = 192px
+            const dropdownHeight = 120; // Approximate height
+            
+            // Calculate position
+            let left = buttonRect.right - dropdownWidth;
+            let top = buttonRect.bottom + 8;
+            
+            // Adjust if dropdown would go off-screen
+            if (left < 10) {
+                left = buttonRect.left;
+            }
+            if (top + dropdownHeight > window.innerHeight - 10) {
+                top = buttonRect.top - dropdownHeight - 8;
+            }
+            
+            // Set position and show
+            dropdown.style.left = left + 'px';
+            dropdown.style.top = top + 'px';
+            dropdown.style.display = 'block';
+            dropdown.classList.remove('hidden');
+        } else {
+            // Hide dropdown
+            dropdown.classList.add('hidden');
+            dropdown.style.display = 'none';
+        }
+    }
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        const isInsideDropdown = event.target.closest('[id^="dropdown-"]') || 
+                                event.target.closest('button[onclick*="toggleDropdown"]');
+        
+        if (!isInsideDropdown) {
+            document.querySelectorAll('[id^="dropdown-"]').forEach(dropdown => {
+                dropdown.classList.add('hidden');
+                dropdown.style.display = 'none';
+            });
+        }
+    });
+
+    // Close dropdowns on scroll and resize
+    ['scroll', 'resize'].forEach(eventType => {
+        window.addEventListener(eventType, function() {
+            document.querySelectorAll('[id^="dropdown-"]').forEach(dropdown => {
+                dropdown.classList.add('hidden');
+                dropdown.style.display = 'none';
+            });
+        });
+    });
+    </script>
 @endsection

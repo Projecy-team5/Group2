@@ -77,12 +77,14 @@ class UserController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
                 'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+                'is_admin' => ['required', 'boolean'],
             ]);
 
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $request->password ? Hash::make($request->password) : $user->password,
+                'is_admin' => $request->is_admin,
             ]);
 
             return redirect()->route('admin.users.index')->with('success', 'User updated successfully!');
