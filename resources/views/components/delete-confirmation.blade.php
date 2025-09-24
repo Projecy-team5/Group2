@@ -21,17 +21,6 @@ function showDeleteModal(form) {
     }).then((result) => {
         if (result.isConfirmed) {
             form.submit();
-            swalWithBootstrapButtons.fire({
-                title: "Deleted!",
-                text: "The user has been deleted.",
-                icon: "success"
-            });
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            swalWithBootstrapButtons.fire({
-                title: "Cancelled",
-                text: "The user is safe :)",
-                icon: "error"
-            });
         }
     });
 }

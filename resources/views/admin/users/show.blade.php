@@ -1,155 +1,120 @@
 @extends('layouts.dashboard')
 @section('content')
-    <div class="p-6">
-        <div class="max-w-4xl mx-auto">
-            <div class="bg-white overflow-hidden shadow rounded-lg mb-6">
-                <div class="px-4 py-5 sm:px-6 bg-blue-50 border-b border-blue-100">
-                    <div class="flex items-center">
-                        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                            <img class="h-20 w-20 rounded-full border-4 border-white shadow-lg"
-                                src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}">
+    <div class="p-6 pt-0">
+        <div class="space-y-4">
+            <div class="flex items-center py-2 justify-between gap-4">
+                <div class="flex items-center gap-4 flex-1">
+                    <h1 class="text-3xl font-bold text-gray-900">User Details</h1>
+                </div>
+            </div>
+        </div>
+        <div class="rounded-md border border-[#b8bbc0]" style="margin-top:15px;">
+            <div class="p-6">
+                <div class="flex items-center gap-4 mb-6">
+                    @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                        <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}"
+                            class="w-16 h-16 object-cover rounded-full shadow-sm border border-gray-200">
+                    @else
+                        <div
+                            class="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full shadow-sm border border-gray-200 flex items-center justify-center">
+                            <span class="text-blue-600 font-medium text-lg">{{ substr($user->name, 0, 1) }}</span>
+                        </div>
+                    @endif
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-900">{{ $user->name }}</h2>
+                        <div class="flex items-center gap-2 text-sm mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-mail h-4 w-4 text-gray-500">
+                                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                                <path d="m22 7-10 5L2 7"></path>
+                            </svg>
+                            <span class="text-gray-700">{{ $user->email }}</span>
+                        </div>
+                        @if ($user->email_verified_at)
+                            <div
+                                class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-green-700 border-green-300 bg-green-50 font-medium mt-2">
+                                ● Verified Account
+                            </div>
                         @else
                             <div
-                                class="h-20 w-20 rounded-full bg-blue-500 flex items-center justify-center border-4 border-white shadow-lg">
-                                <span class="text-white font-bold text-2xl">{{ substr($user->name, 0, 1) }}</span>
+                                class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-red-700 border-red-300 bg-red-50 font-medium mt-2">
+                                ● Unverified Account
                             </div>
                         @endif
-                        <div class="ml-6">
-                            <h2 class="text-2xl font-bold text-gray-900">{{ $user->name }}</h2>
-                            <p class="text-blue-600 font-medium">{{ $user->email }}</p>
-                            <div class="mt-2">
-                                @if ($user->email_verified_at)
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        ✓ Verified Account
-                                    </span>
-                                @else
-                                    <span
-                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                        ✗ Unverified Account
-                                    </span>
-                                @endif
-                            </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6 pt-4 border-t">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 mb-1">User ID</p>
+                        <p class="font-semibold text-gray-900">#{{ $user->id }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 mb-1">Member Since</p>
+                        <div class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-calendar h-4 w-4 text-purple-500">
+                                <path d="M8 2v4"></path>
+                                <path d="M16 2v4"></path>
+                                <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                <path d="M3 10h18"></path>
+                            </svg>
+                            <span class="text-gray-600">{{ $user->created_at->format('M d, Y') }}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 mb-1">Last Updated</p>
+                        <div class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-calendar h-4 w-4 text-purple-500">
+                                <path d="M8 2v4"></path>
+                                <path d="M16 2v4"></path>
+                                <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                <path d="M3 10h18"></path>
+                            </svg>
+                            <span class="text-gray-600">{{ $user->updated_at->format('M d, Y') }}</span>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                <!-- User ID Card -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                                    <span class="text-gray-600 font-mono text-sm">#</span>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">User ID</dt>
-                                    <dd class="text-lg font-semibold text-gray-900">#{{ $user->id }}</dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                @if ($user->email_verified_at)
-                                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                                        <span class="text-green-600 text-sm">✓</span>
-                                    </div>
-                                @else
-                                    <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                                        <span class="text-red-600 text-sm">✗</span>
-                                    </div>
-                                @endif
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Email Status</dt>
-                                    <dd class="text-sm font-medium text-gray-900">
-                                        @if ($user->email_verified_at)
-                                            Verified {{ $user->email_verified_at->format('M d, Y') }}
-                                        @else
-                                            Not Verified
-                                        @endif
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white overflow-hidden shadow rounded-lg">
-                    <div class="p-5">
-                        <div class="flex items-center">
-                            <div class="flex-shrink-0">
-                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <span class="text-blue-600 text-xs">📅</span>
-                                </div>
-                            </div>
-                            <div class="ml-5 w-0 flex-1">
-                                <dl>
-                                    <dt class="text-sm font-medium text-gray-500 truncate">Member Since</dt>
-                                    <dd class="text-sm font-medium text-gray-900">{{ $user->created_at->format('M d, Y') }}
-                                    </dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white shadow rounded-lg mb-6">
-                <div class="px-4 py-5 sm:p-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Account Details</h3>
-                    <div class="border-t border-gray-200">
-                        <dl>
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">Full Name</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $user->name }}</dd>
-                            </div>
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">Email Address</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ $user->email }}</dd>
-                            </div>
-                            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">Registration Date</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    {{ $user->created_at->format('F d, Y \a\t g:i A') }}</dd>
-                            </div>
-                            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                                <dt class="text-sm font-medium text-gray-500">Last Updated</dt>
-                                <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    {{ $user->updated_at->format('F d, Y \a\t g:i A') }}</dd>
-                            </div>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white shadow rounded-lg">
-                <div class="px-4 py-5 sm:p-6">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Account Actions</h3>
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <a href="{{ route('admin.users.index') }}"
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                            ← Back to Users
-                        </a>
-                        <a href="{{ route('admin.users.edit', $user) }}"
-                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Edit User
-                        </a>
-                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline delete-form">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button"
-                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                                onclick="showDeleteModal(this.form)">
-                                Delete User
-                            </button>
-                        </form>
-                    </div>
+                <div class="flex items-center justify-end gap-2 pt-4 border-t">
+                    <a href="{{ route('admin.users.index') }}"
+                        class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white text-gray-700 shadow-sm hover:bg-gray-50 h-8 rounded-md px-3 text-xs">
+                        ← Back to Users
+                    </a>
+                    <a href="{{ route('admin.users.edit', $user) }}">
+                        <button
+                            class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-green-50 hover:text-green-700 hover:border-green-200 hover:shadow-md h-8 rounded-md px-3 text-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-square-pen h-4 w-4 mr-1">
+                                <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path
+                                    d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z">
+                                </path>
+                            </svg>
+                            Edit
+                        </button>
+                    </a>
+                    <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline delete-form">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button"
+                            class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-red-50 hover:text-red-700 hover:border-red-200 hover:shadow-md h-8 rounded-md px-3 text-xs text-red-600"
+                            onclick="showDeleteModal(this.form)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-trash2 h-4 w-4 mr-1">
+                                <path d="M10 11v6"></path>
+                                <path d="M14 11v6"></path>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                                <path d="M3 6h18"></path>
+                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            Delete
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
