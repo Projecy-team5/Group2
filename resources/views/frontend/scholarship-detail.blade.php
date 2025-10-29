@@ -47,6 +47,23 @@
                         </div>
                     </div>
 
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 mt-6">
+                        <div class="px-6 py-4 border-b border-gray-200">
+                            <h2 class="text-lg font-semibold text-gray-900">Gallery</h2>
+                        </div>
+                        <div class="p-6">
+                            @if($scholarship->images->count())
+                                <div class="flex gap-3 overflow-x-auto pb-3">
+                                    @foreach($scholarship->images as $img)
+                                        <img src="{{ asset('storage/' . $img->image_path) }}" class="rounded-lg h-40 object-cover shadow-md" alt="Scholarship Image">
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="text-gray-500 italic">No gallery images uploaded for this scholarship yet.</div>
+                            @endif
+                        </div>
+                    </div>
+
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                         <div class="px-6 py-4 border-b border-gray-200">
                             <h2 class="text-lg font-semibold text-gray-900">Application Details</h2>
@@ -113,7 +130,30 @@
 
                     <div class="bg-white rounded-xl shadow-sm border border-gray-200">
                         <div class="p-6 space-y-3">
-                            <a href="#" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 font-medium">Apply Now</a>
+                            @auth
+                                <form action="{{ route('scholarships.apply', $scholarship) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                                    @csrf
+                                    <div>
+                                        <label for="motivation_essay" class="block font-medium text-gray-700">Motivation / Statement of Purpose</label>
+                                        <textarea id="motivation_essay" name="motivation_essay" class="w-full border rounded p-2" rows="4" required>{{ old('motivation_essay') }}</textarea>
+                                    </div>
+                                    <div>
+                                        <label for="resume" class="block font-medium text-gray-700">Resume (PDF, DOC, DOCX; optional)</label>
+                                        <input type="file" name="resume" id="resume" accept=".pdf,.doc,.docx" class="w-full border rounded p-2">
+                                    </div>
+                                    <div>
+                                        <label for="phone" class="block font-medium text-gray-700">Phone Number</label>
+                                        <input type="text" name="phone" id="phone" class="w-full border rounded p-2" value="{{ old('phone') }}" required>
+                                    </div>
+                                    <div>
+                                        <label for="address" class="block font-medium text-gray-700">Address</label>
+                                        <textarea name="address" id="address" class="w-full border rounded p-2" required>{{ old('address') }}</textarea>
+                                    </div>
+                                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 font-medium">Apply Now</button>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 font-medium">Please login to apply</a>
+                            @endauth
                             <a href="{{ route('scholarships.index') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 bg-white text-gray-700 rounded-lg hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 font-medium">Back to List</a>
                         </div>
                     </div>

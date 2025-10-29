@@ -35,7 +35,7 @@
                 <p class="text-sm text-gray-600 mt-1">Enter the scholarship details, requirements, and application information</p>
             </div>
 
-            <form action="{{ route('admin.scholarships.store') }}" method="POST" class="p-6">
+            <form action="{{ route('admin.scholarships.store') }}" method="POST" enctype="multipart/form-data" class="p-6">
                 @csrf
                 <div class="space-y-6">
                     <div class="group">
@@ -48,8 +48,8 @@
                             Scholarship Name
                         </label>
                         <div class="relative">
-                            <input type="text" name="scholarship_name" id="scholarship_name" value="{{ old('scholarship_name') }}" 
-                                   class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white" 
+                            <input type="text" name="scholarship_name" id="scholarship_name" value="{{ old('scholarship_name') }}"
+                                   class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                                    placeholder="e.g., The John Doe Memorial Scholarship" required>
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
@@ -81,8 +81,8 @@
                                 Award Amount
                             </label>
                             <div class="relative">
-                                <input type="number" name="award_amount" id="award_amount" value="{{ old('award_amount') }}" 
-                                       class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white" 
+                                <input type="number" name="award_amount" id="award_amount" value="{{ old('award_amount') }}"
+                                       class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                                        placeholder="5000" step="0.01" required>
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
@@ -113,8 +113,8 @@
                                 Country
                             </label>
                             <div class="relative">
-                                <input type="text" name="country" id="country" value="{{ old('country') }}" 
-                                       class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white" 
+                                <input type="text" name="country" id="country" value="{{ old('country') }}"
+                                       class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                                        placeholder="e.g., United States" required>
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
@@ -145,8 +145,8 @@
                                 Status
                             </label>
                             <div class="relative">
-                                <select name="status" id="status" 
-                                        class="block w-full pl-10 pr-8 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white" 
+                                <select name="status" id="status"
+                                        class="block w-full pl-10 pr-8 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                                         required>
                                     <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
                                     <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
@@ -182,7 +182,7 @@
                         </label>
                         <div class="relative">
                             <textarea name="eligibility_criteria" id="eligibility_criteria" rows="4"
-                                      class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white" 
+                                      class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                                       placeholder="e.g., Must be a high school senior with a minimum GPA of 3.5." required>{{ old('eligibility_criteria') }}</textarea>
                             <div class="absolute top-3 left-0 pl-3 flex items-start pointer-events-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 mt-0.5">
@@ -216,7 +216,7 @@
                         </label>
                         <div class="relative">
                             <textarea name="application_description" id="application_description" rows="4"
-                                      class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white" 
+                                      class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                                       placeholder="Provide a detailed description for applicants." required>{{ old('application_description') }}</textarea>
                             <div class="absolute top-3 left-0 pl-3 flex items-start pointer-events-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400 mt-0.5">
@@ -254,8 +254,8 @@
                             <div id="requirements-container" class="space-y-3">
                                 <div class="requirement-item flex gap-3 items-center">
                                     <div class="relative flex-1">
-                                        <input type="text" name="application_requirements[]" 
-                                               class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white" 
+                                        <input type="text" name="application_requirements[]"
+                                               class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
                                                placeholder="e.g., Official transcripts" required>
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
@@ -306,8 +306,8 @@
                             Application Deadline
                         </label>
                         <div class="relative">
-                            <input type="date" name="application_deadline" id="application_deadline" value="{{ old('application_deadline') }}" 
-                                   class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white" 
+                            <input type="date" name="application_deadline" id="application_deadline" value="{{ old('application_deadline') }}"
+                                   class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                                    required>
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
@@ -329,10 +329,34 @@
                             </div>
                         @enderror
                     </div>
+
+                    <div class="group">
+                        <label for="gallery_images" class="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                            Scholarship Gallery Images
+                        </label>
+                        <input type="file" id="gallery_images" name="gallery_images[]" accept="image/jpeg,image/png,image/jpg" multiple max="10"
+                            class="block w-full text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700">
+                        <p class="text-xs text-gray-500 mt-1">You may upload up to 10 images (JPG, JPEG, PNG, 2MB each).</p>
+                        @error('gallery_images')
+                        <div class="mt-2 flex items-center gap-2 text-sm text-red-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="15" y1="9" x2="9" y2="15" />
+                                <line x1="9" y1="9" x2="15" y2="15" />
+                            </svg>
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200 mt-8">
-                    <a href="{{ route('admin.scholarships.index') }}" 
+                    <a href="{{ route('admin.scholarships.index') }}"
                        class="inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 bg-white text-gray-700 rounded-lg hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 font-medium">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 6 6 18" />
@@ -340,7 +364,7 @@
                         </svg>
                         Cancel
                     </a>
-                    <button type="submit" 
+                    <button type="submit"
                             class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 font-medium shadow-sm hover:shadow-md">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M5 12h14" />
@@ -384,8 +408,8 @@
             newItem.className = 'requirement-item flex gap-3 items-center';
             newItem.innerHTML = `
                 <div class="relative flex-1">
-                    <input type="text" name="application_requirements[]" 
-                           class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white" 
+                    <input type="text" name="application_requirements[]"
+                           class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
                            placeholder="e.g., Personal Statement" required>
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
@@ -406,7 +430,7 @@
             `;
             container.appendChild(newItem);
             updateRemoveButtons();
-            
+
             newItem.querySelector('.remove-requirement').addEventListener('click', function() {
                 newItem.remove();
                 updateRemoveButtons();

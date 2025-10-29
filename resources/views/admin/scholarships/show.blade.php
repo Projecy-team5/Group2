@@ -259,6 +259,31 @@
                     </div>
                 </div>
             </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="text-blue-600">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                            <path d="M2 17l10 5 10-5" />
+                            <path d="M2 12l10 5 10-5" />
+                        </svg>
+                        Gallery Images
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
+                        @forelse($scholarship->images as $img)
+                            <div class="relative group">
+                                <img src="{{ asset('storage/' . $img->image_path) }}" class="rounded-lg h-28 object-cover aspect-square border border-gray-200 shadow" alt="Scholarship Gallery Image">
+                            </div>
+                        @empty
+                            <div class="text-gray-500 italic">No gallery images yet.</div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

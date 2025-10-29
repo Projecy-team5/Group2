@@ -175,8 +175,8 @@
                                     Status
                                 </label>
                                 <div class="relative">
-                                    <select name="status" id="status" 
-                                            class="block w-full pl-10 pr-8 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white" 
+                                    <select name="status" id="status"
+                                            class="block w-full pl-10 pr-8 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                                             required>
                                         <option value="active" {{ old('status', $scholarship->status) == 'active' ? 'selected' : '' }}>Active</option>
                                         <option value="inactive" {{ old('status', $scholarship->status) == 'inactive' ? 'selected' : '' }}>Inactive</option>
@@ -408,6 +408,40 @@
                                 </div>
                             @enderror
                         </div>
+                    </div>
+                    <div class="group mb-6">
+                        <label for="gallery_images" class="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            Edit Gallery Images (JPG, JPEG, PNG, Max 2MB each, max 10 total)
+                        </label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
+                            @forelse($scholarship->images as $img)
+                                <div class="relative group">
+                                    <img src="{{ asset('storage/' . $img->image_path) }}" class="rounded-lg h-28 object-cover aspect-square border border-gray-200 shadow" alt="Scholarship Gallery Image">
+                                    <label class="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded px-2 py-1 text-xs cursor-pointer opacity-80 group-hover:opacity-100 transition">
+                                        <input type="checkbox" name="remove_gallery_images[]" value="{{ $img->id }}" class="sr-only">Remove
+                                    </label>
+                                </div>
+                            @empty
+                                <div class="text-gray-500 italic">No gallery images yet.</div>
+                            @endforelse
+                        </div>
+                        @php $currentCount = $scholarship->images->count(); @endphp
+                        @if($currentCount < 10)
+                            <input type="file" id="gallery_images" name="gallery_images[]" accept="image/jpeg,image/png,image/jpg" multiple max="{{ 10 - $currentCount }}"
+                                class="block w-full text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700">
+                            <p class="text-xs text-gray-500 mt-1">You may add up to {{ 10 - $currentCount }} more images.</p>
+                        @endif
+                        @error('gallery_images')
+                            <div class="mt-2 flex items-center gap-2 text-sm text-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="15" y1="9" x2="9" y2="15" />
+                                    <line x1="9" y1="9" x2="15" y2="15" />
+                                </svg>
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
                     <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200 mt-8">
                         <a href="{{ route('admin.scholarships.index') }}"

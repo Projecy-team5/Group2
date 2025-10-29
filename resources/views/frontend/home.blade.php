@@ -1,5 +1,23 @@
 @extends('layouts.homepage')
 
+@push('head')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+@endpush
+
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        new Swiper('.swiper-scholarship', {
+          loop: true,
+          autoplay: { delay: 4000, disableOnInteraction: false },
+          pagination: { el: '.swiper-pagination', clickable: true },
+        });
+      });
+    </script>
+@endpush
+
+
 @section('content')
     <div class="relative overflow-hidden bg-gradient-to-br from-indigo-900 to-purple-800">
         <div class="max-w mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
@@ -8,10 +26,6 @@
                     Your Gateway to
                     <span class="block text-yellow-300">Educational Funding</span>
                 </h1>
-                <div class="relative w-full max-w-4xl mx-auto h-[400px] md:h-[500px] mb-8">
-                <spline-viewer  class="w-full h-full"
-                loading-anim-type="spinner-big-light" url="https://prod.spline.design/Q5AQiCmq3y9bVDXk/scene.splinecode"></spline-viewer>
-                </div>
                 <p class="text-xl text-indigo-100 mb-8 max-w-3xl mx-auto leading-relaxed animate-slide-up">
                     Discover thousands of scholarships, grants, and educational opportunities tailored to your profile. Start your journey to debt-free education today.
                 </p>

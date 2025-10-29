@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Scholarship;
+use App\Models\ScholarshipImage;
+use Illuminate\Support\Facades\Log;
 
 class ScholarshipController extends Controller
 {
@@ -46,7 +49,18 @@ class ScholarshipController extends Controller
             'application_requirements' => 'required|array',
             'application_deadline' => 'required|date|after:today',
             'status' => 'required|in:active,inactive,closed',
+            'gallery_images' => 'nullable|array',
+            'gallery_images.*' => 'image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        // Debug: Check uploaded files - uncomment below to see what is being uploaded
+        // dd($request->file('gallery_images'));
+
+        // We'll check the number of uploaded files for this new scholarship
+        $uploadedCount = $request->hasFile('gallery_images') ? count($request->file('gallery_images')) : 0;
+        if ($uploadedCount > 10) {
+            return back()->withInput()->withErrors(['gallery_images' => 'You may upload up to 10 images only!']);
+        }
 
         // 2. Create a new scholarship instance with the validated data
         $scholarship = new Scholarship;
@@ -62,7 +76,27 @@ class ScholarshipController extends Controller
         // 3. Save the scholarship to the database
         $scholarship->save();
 
-        // 4. Redirect the user to the index page with a success message
+        // 4. Save gallery images if present
+        if ($request->hasFile('gallery_images')) {
+            Log::info('Gallery images are present.');
+            foreach ($request->file('gallery_images') as $image) {
+                Log::info('Processing image: ' . $image->getClientOriginalName());
+                try {
+                    $path = $image->store('scholarship_gallery', 'public');
+                    Log::info('Image path: ' . $path);
+                    $scholarshipImage = ScholarshipImage::create([
+                        'scholarship_id' => $scholarship->id,
+                        'image_path' => $path,
+                    ]);
+                    Log::info('Scholarship ID: ' . $scholarship->id);
+                } catch (\Exception $e) {
+                    Log::error('Error uploading image: ' . $e->getMessage());
+                }
+                Log::info('Image processing complete.');
+            }
+        }
+
+        // 5. Redirect the user to the index page with a success message
         return redirect()->route('admin.scholarships.index')->with('success', 'Scholarship created successfully!');
     }
     public function destroy(Scholarship $scholarship)

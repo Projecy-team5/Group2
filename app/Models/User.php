@@ -68,4 +68,8 @@ class User extends Authenticatable
         ];
     }
 
+    public function applications()
+    {
+        return $this->hasMany(\App\Models\Application::class);
+    }
 }
