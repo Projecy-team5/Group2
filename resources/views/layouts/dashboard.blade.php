@@ -169,6 +169,43 @@
                 </div>
             </div>
         </header>
+        @auth
+            @if(Auth::user()->is_admin)
+                {{-- Admin dashboard content is inside admin/dashboard.blade.php --}}
+            @else
+                <div class="px-6 py-8">
+                    <h1 class="text-2xl font-bold mb-6">Your Dashboard</h1>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+                        <div class="bg-white p-6 rounded shadow flex flex-col items-center text-center">
+                            <div class="text-3xl font-bold text-indigo-600">{{ $appStats['applied'] }}</div>
+                            <div class="text-gray-700 mt-2">Applications Submitted</div>
+                        </div>
+                        <div class="bg-white p-6 rounded shadow flex flex-col items-center text-center">
+                            <div class="text-3xl font-bold text-green-600">{{ $appStats['scholarships'] }}</div>
+                            <div class="text-gray-700 mt-2">Available Scholarships</div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded shadow p-6">
+                        <h2 class="text-lg font-semibold mb-4">My Recent Applications</h2>
+                        @if(count($recentUserApplications))
+                            <ul>
+                                @foreach($recentUserApplications as $app)
+                                <li class="border-b last:border-0 py-2 flex justify-between items-start">
+                                    <span>
+                                        <span class="font-semibold">{{ $app->scholarship->scholarship_name }}</span>
+                                        — <span class="text-sm text-gray-500 capitalize">{{ $app->status }}</span>
+                                    </span>
+                                    <span class="text-xs text-gray-500">{{ $app->created_at->diffForHumans() }}</span>
+                                </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <div class="text-gray-500">You have not submitted any applications yet.</div>
+                        @endif
+                    </div>
+                </div>
+            @endif
+        @endauth
         @yield('content')
     </main>
 </body>

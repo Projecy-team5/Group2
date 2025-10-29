@@ -6,6 +6,9 @@ use App\Http\Controllers\Admin\ScholarshipController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FrontendScholarshipController;
 use App\Http\Controllers\GeminiController;
+use App\Http\Controllers\ApplicationController;
+use Illuminate\Support\Facades\Auth;
+
 Route::get('/', function () {
     return view('frontend/home');
 });
@@ -40,7 +43,17 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        if (Auth::check() && Auth::user()->is_admin) {
+            return redirect()->route('admin.dashboard');
+        } else {
+            $user = Auth::user();
+            $appStats = [
+                'applied' => $user->applications()->count(),
+                'scholarships' => \App\Models\Scholarship::where('status', 'active')->count(),
+            ];
+            $recentUserApplications = $user->applications()->with('scholarship')->latest()->take(5)->get();
+            return view('dashboard', compact('appStats', 'recentUserApplications'));
+        }
     })->name('dashboard');
 });
 
@@ -65,4 +78,14 @@ Route::prefix('admin/users')->name('admin.users.')->middleware(['auth', 'admin']
     Route::put('/{user}', [UserController::class, 'update'])->name('update');
     Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
     Route::get('/{user}', [UserController::class, 'show'])->name('show');
+});
+
+// Route for applying to a scholarship
+Route::middleware(['auth', 'verified'])->group(function() {
+    Route::post('/scholarships/{scholarship}/apply', [ApplicationController::class, 'store'])->name('scholarships.apply');
+});
+
+// Route for admin to view submitted applications
+Route::middleware(['auth', 'admin'])->group(function() {
+    Route::get('/admin/applications', [ApplicationController::class, 'index'])->name('admin.applications.index');
 });

@@ -33,4 +33,9 @@ class Scholarship extends Model
     protected $casts = [
         'application_requirements' => 'array', // This is the line you need to add
     ];
+
+    public function images()
+    {
+        return $this->hasMany(\App\Models\ScholarshipImage::class);
+    }
 }
