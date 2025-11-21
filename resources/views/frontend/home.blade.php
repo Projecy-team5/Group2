@@ -1,23 +1,4 @@
 @extends('layouts.homepage')
-
-@push('head')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-@endpush
-
-@push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        new Swiper('.swiper-scholarship', {
-          loop: true,
-          autoplay: { delay: 4000, disableOnInteraction: false },
-          pagination: { el: '.swiper-pagination', clickable: true },
-        });
-      });
-    </script>
-@endpush
-
-
 @section('content')
     <div class="relative overflow-hidden bg-gradient-to-br from-indigo-900 to-purple-800">
         <div class="max-w mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
@@ -222,43 +203,4 @@
             </a>
         </div>
     </div>
-
-    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.57/build/spline-viewer.js"></script>
-
-    <style>
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-        .animate-fade-in {
-            animation: fadeIn 1s ease-out;
-        }
-        .animate-slide-up {
-            animation: slideUp 1s ease-out;
-        }
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-        .animate-pulse {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        spline-viewer {
-            transform: translateZ(0); /* Force hardware acceleration */
-            will-change: transform; /* Optimize animations */
-        }
-
-    </style>
 @endsection
