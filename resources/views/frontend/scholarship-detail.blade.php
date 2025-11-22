@@ -1,11 +1,6 @@
 @extends('layouts.homepage')
 @section('content')
-    <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <style>
-        .swiper-button-next, .swiper-button-prev { color: #4f46e5; }
-        .swiper-pagination-bullet-active { background: #4f46e5; }
-    </style>
+
 
     <div class="bg-gray-50 min-h-screen py-12 px-4">
         <div class="max-w-7xl mx-auto">
@@ -172,17 +167,4 @@
     </dialog>
     @endauth
 
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            new Swiper('.gallerySlider', {
-                loop: true,
-                autoplay: { delay: 4000, disableOnInteraction: false },
-                pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-                grabCursor: true,
-            });
-        });
-    </script>
 @endsection
