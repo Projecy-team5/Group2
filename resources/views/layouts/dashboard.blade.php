@@ -102,6 +102,30 @@
                         </svg>
                         Scholarships
                     </a>
+                    <a href="{{ route('admin.articles.index') }}"
+                        class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors
+                        @if (request()->routeIs('admin.articles.*')) text-primary bg-primary/10 border border-primary/20
+                        @else
+                            text-gray-600 hover:bg-gray-100 hover:text-gray-900 @endif">
+                        <svg class="w-5 h-5 mr-3 @if (request()->routeIs('admin.articles.*')) text-primary @endif" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                        Articles
+                    </a>
+                    <a href="{{ route('admin.categories.index') }}"
+                        class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors
+                        @if (request()->routeIs('admin.categories.*')) text-primary bg-primary/10 border border-primary/20
+                        @else
+                            text-gray-600 hover:bg-gray-100 hover:text-gray-900 @endif">
+                        <svg class="w-5 h-5 mr-3 @if (request()->routeIs('admin.categories.*')) text-primary @endif" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                        Articles Categories
+                    </a>
                 </div>
             </div>
             @auth

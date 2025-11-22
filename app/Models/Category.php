@@ -10,17 +10,10 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'description',
-        'slug',
-    ];
+    protected $fillable = ['name', 'slug', 'description'];
 
-    /**
-     * Get the opportunities for this category.
-     */
-    public function opportunities(): HasMany
+    public function articles()
     {
-        return $this->hasMany(Opportunity::class);
+        return $this->belongsToMany(Article::class);
     }
 }

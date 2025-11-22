@@ -94,7 +94,7 @@
                             <a href="{{ url(path: '/') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Home</a>
                             <a href="{{ url('/scholarships') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Scholarships</a>
                             <a href="{{ url('/about') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">About</a>
-                            <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Resources</a>
+                            <a href="{{ url('/articles') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Resources</a>
                             <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Contact</a>
                         </div>
                     </div>

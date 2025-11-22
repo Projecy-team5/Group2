@@ -7,17 +7,35 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\FrontendScholarshipController;
 use App\Http\Controllers\GeminiController;
 use App\Http\Controllers\ApplicationController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Frontend\ArticleController;   // ← Frontend
+use App\Http\Controllers\Admin\ArticleController as AdminArticleController; // ← Admin (aliased)
+use App\Http\Controllers\Admin\CategoryController;
 
+// Frontend Routes
 Route::get('/', function () {
-    return view('frontend/home');
-});
+    return view('frontend.home');
+})->name('home');
 
 Route::get('/about', function () {
-    return view('frontend/about');
-});
+    return view('frontend.about');
+})->name('about');
 
+// THIS IS THE FIX → List all articles as cards
+Route::get('/articles', [App\Http\Controllers\Frontend\ArticleController::class, 'index'])
+    ->name('articles.index');
 
+// SINGLE ARTICLE
+Route::get('/articles/{slug}', [App\Http\Controllers\Frontend\ArticleController::class, 'show'])
+    ->name('articles.show');
+
+// CATEGORY PAGE
+Route::get('/category/{slug}', [App\Http\Controllers\Frontend\ArticleController::class, 'category'])
+    ->name('articles.category');
+// Scholarships
+Route::get('/scholarships', [FrontendScholarshipController::class, 'index'])->name('scholarships.index');
+Route::get('/scholarships/{scholarship}', [FrontendScholarshipController::class, 'show'])->name('scholarships.show');
+
+// Chatbot test routes
 Route::post('/chatbot', [GeminiController::class, 'handle'])->middleware('web');
 Route::get('/test-chat', function () {
     $apiKey = env('GOOGLE_API_KEY');
@@ -28,64 +46,44 @@ Route::get('/test-chat', function () {
     ]);
 });
 
-Route::get('/test-chatbot', function () {
-    $controller = new \App\Http\Controllers\GeminiController();
-    $request = new \Illuminate\Http\Request();
-    $request->merge(['message' => 'Hello, test message']);
-    return $controller->handle($request);
-});
-Route::get('/scholarships', [FrontendScholarshipController::class, 'index'])->name('scholarships.index');
-Route::get('/scholarships/{scholarship}', [FrontendScholarshipController::class, 'show'])->name('scholarships.show');
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
+// Authenticated routes
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', function () {
-        if (Auth::check() && Auth::user()->is_admin) {
+        if (Auth::user()->is_admin) {
             return redirect()->route('admin.dashboard');
-        } else {
-            $user = Auth::user();
-            $appStats = [
-                'applied' => $user->applications()->count(),
-                'scholarships' => \App\Models\Scholarship::where('status', 'active')->count(),
-            ];
-            $recentUserApplications = $user->applications()->with('scholarship')->latest()->take(5)->get();
-            return view('dashboard', compact('appStats', 'recentUserApplications'));
         }
+        $user = Auth::user();
+        $appStats = [
+            'applied' => $user->applications()->count(),
+            'scholarships' => \App\Models\Scholarship::where('status', 'active')->count(),
+        ];
+        $recentUserApplications = $user->applications()->with('scholarship')->latest()->take(5)->get();
+        return view('dashboard', compact('appStats', 'recentUserApplications'));
     })->name('dashboard');
 });
 
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->middleware(['auth', 'admin'])->name('admin.dashboard');
+// Admin Routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
+    // Scholarships
+    Route::resource('scholarships', ScholarshipController::class)->except(['show']);
+    Route::get('scholarships/{scholarship}', [ScholarshipController::class, 'show'])->name('scholarships.show');
 
-Route::prefix('admin/scholarships')->name('admin.scholarships.')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/', [ScholarshipController::class, 'index'])->name('index');
-    Route::get('/create', [ScholarshipController::class, 'create'])->name('create');
-    Route::post('/', [ScholarshipController::class, 'store'])->name('store');
-    Route::get('/{scholarship}/edit', [ScholarshipController::class, 'edit'])->name('edit');
-    Route::put('/{scholarship}', [ScholarshipController::class, 'update'])->name('update');
-    Route::delete('/{scholarship}', [ScholarshipController::class, 'destroy'])->name('destroy');
-    Route::get('/{scholarship}', [ScholarshipController::class, 'show'])->name('show');
+    // Users
+    Route::resource('users', UserController::class)->except(['show']);
+    Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+
+    // Articles & Categories (Admin CRUD)
+    Route::resource('articles', AdminArticleController::class);
+    Route::resource('categories', CategoryController::class);
+
+    // Applications
+    Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
 });
 
-Route::prefix('admin/users')->name('admin.users.')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/', [UserController::class, 'index'])->name('index');
-    Route::get('/create', [UserController::class, 'create'])->name('create');
-    Route::post('/', [UserController::class, 'store'])->name('store');
-    Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
-    Route::put('/{user}', [UserController::class, 'update'])->name('update');
-    Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
-    Route::get('/{user}', [UserController::class, 'show'])->name('show');
-});
-
-// Route for applying to a scholarship
-Route::middleware(['auth', 'verified'])->group(function() {
-    Route::post('/scholarships/{scholarship}/apply', [ApplicationController::class, 'store'])->name('scholarships.apply');
-});
-
-// Route for admin to view submitted applications
-Route::middleware(['auth', 'admin'])->group(function() {
-    Route::get('/admin/applications', [ApplicationController::class, 'index'])->name('admin.applications.index');
+// Apply to scholarship (user)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/scholarships/{scholarship}/apply', [ApplicationController::class, 'store'])
+        ->name('scholarships.apply');
 });
