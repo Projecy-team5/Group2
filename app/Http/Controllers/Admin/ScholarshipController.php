@@ -105,20 +105,55 @@ class ScholarshipController extends Controller
         return redirect()->route('admin.scholarships.index')->with('success', 'Scholarship deleted successfully.');
     }
     public function update(Request $request, Scholarship $scholarship)
-    {
-        $validated = $request->validate([
-            'scholarship_name' => 'required|string|max:255',
-            'award_amount' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
-            'eligibility_criteria' => 'required|string',
-            'application_description' => 'required|string',
-            'application_requirements' => 'required|array|min:1',
-            'application_deadline' => 'required|date|after:today',
-            'status' => 'required|in:active,inactive,closed',
-        ]);
+{
+    $validated = $request->validate([
+        'scholarship_name'         => 'required|string|max:255',
+        'award_amount'             => 'required|numeric|min:0',
+        'country'                  => 'required|string|max:255',
+        'status'                   => 'required|in:active,inactive,closed',
+        'eligibility_criteria'     => 'required|string',
+        'application_description'  => 'required|string',
+        'application_requirements' => 'required|array|min:1',
+        'application_requirements.*' => 'required|string',
+        'application_deadline'     => 'required|date',
 
-        $scholarship->update($validated);
+        'gallery_images'           => 'nullable|array',
+        'gallery_images.*'         => 'image|mimes:jpeg,jpg,png|max:2048',
 
-        return redirect()->route('admin.scholarships.index')->with('success', 'Scholarship updated successfully.');
+        'remove_gallery_images'    => 'nullable|array',
+        'remove_gallery_images.*'  => 'integer|exists:scholarship_images,id',
+    ]);
+
+    // Update text fields
+    $scholarship->update($validated);
+
+    // Remove selected images
+    if ($request->filled('remove_gallery_images')) {
+        ScholarshipImage::whereIn('id', $request->remove_gallery_images)
+            ->where('scholarship_id', $scholarship->id)
+            ->delete();
     }
+
+    // Add new images (max 10 total)
+    if ($request->hasFile('gallery_images')) {
+        $current = $scholarship->images()->count();
+        $removed = $request->filled('remove_gallery_images') ? count($request->remove_gallery_images) : 0;
+        $allowed = 10 - ($current - $removed);
+
+        if (count($request->file('gallery_images')) > $allowed) {
+            return back()->withErrors(['gallery_images' => "You can only have max 10 images. Remove some first."]);
+        }
+
+        foreach ($request->file('gallery_images') as $image) {
+            $path = $image->store('scholarship_gallery', 'public');
+            ScholarshipImage::create([
+                'scholarship_id' => $scholarship->id,
+                'image_path'     => $path,
+            ]);
+        }
+    }
+    return redirect()
+        ->route('admin.scholarships.index')
+        ->with('success', 'Your update has been successful.');
+}
 }
