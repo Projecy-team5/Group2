@@ -13,6 +13,7 @@ abstract class Controller
 
     protected function userDashboardData()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         return [
             'appStats' => [
