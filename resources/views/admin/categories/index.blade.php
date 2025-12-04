@@ -1,74 +1,260 @@
 @extends('layouts.dashboard')
 
 @section('content')
-<div class="min-h-screen bg-gray-50 py-8">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">Categories</h1>
-            <a href="{{ route('admin.categories.create') }}"
-               class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg shadow transition">
-                + New Category
-            </a>
-        </div>
-
-        @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
-                {{ session('success') }}
+    <div class="p-6 pt-0">
+        <div class="space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex-1 min-w-[220px]">
+                    <h1 class="text-3xl font-bold text-gray-900">Article Categories</h1>
+                </div>
+                <div class="space-x-2 mt-3">
+                    <a href="{{ route('admin.categories.create') }}"
+                        class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-500 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white shadow hover:bg-blue-700 h-10 rounded-md px-4 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" class="lucide lucide-plus h-4 w-4" aria-hidden="true">
+                            <path d="M5 12h14"></path>
+                            <path d="M12 5v14"></path>
+                        </svg>
+                        New Category
+                    </a>
+                </div>
             </div>
-        @endif
+            @if (session('success'))
+                <div
+                    class="flex items-center gap-3 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {{ session('success') }}
+                </div>
+            @endif
 
-        <div class="bg-white shadow overflow-hidden rounded-lg">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Articles</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($categories as $category)
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                {{ $category->name }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $category->slug }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                                    {{ $category->articles->count() }} articles
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{ route('admin.categories.edit', $category) }}"
-                                   class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
+            <div class="rounded-md border border-[#b8bbc0] bg-white/90 shadow-sm">
+                <div class="relative w-full overflow-auto">
+                    <table class="w-full caption-bottom text-sm">
+                        <thead class="[&_tr]:border-b">
+                            <tr class="border-b transition-colors">
+                                <th
+                                    class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
+                                    Category</th>
+                                <th
+                                    class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
+                                    Slug</th>
+                                <th
+                                    class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
+                                    Articles</th>
+                                <th
+                                    class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
+                                    Updated</th>
+                                <th
+                                    class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 w-[160px]">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="[&_tr:last-child]:border-0">
+                            @forelse ($categories as $category)
+                                <tr
+                                    class="border-b data-[state=selected]:bg-muted hover:bg-gray-50 transition-colors duration-200">
+                                    <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="h-10 w-10 rounded-xl border border-blue-100 bg-blue-50 text-blue-600 flex items-center justify-center shadow-sm">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M4 6h16M4 12h10m-7 6h7" />
+                                                </svg>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <div class="font-semibold text-gray-900 truncate max-w-[220px]"
+                                                    title="{{ $category->name }}">
+                                                    {{ $category->name }}
+                                                </div>
+                                                <p class="text-xs text-gray-500 truncate max-w-[260px]">
+                                                    {{ $category->description ? \Illuminate\Support\Str::limit($category->description, 70) : 'No description added yet.' }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                        <div class="flex items-center gap-2 text-sm font-mono text-gray-700">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M14 4h6v6m-10 5 9-9" />
+                                            </svg>
+                                            <span>{{ $category->slug }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                        <span
+                                            class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium text-indigo-700 border-indigo-200 bg-indigo-50">
+                                            {{ $category->articles_count ?? $category->articles->count() }} articles
+                                        </span>
+                                    </td>
+                                    <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                        <div class="flex items-center gap-2 text-sm text-gray-600">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-purple-500"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M8 2v4m8-4v4M3 10h18" />
+                                                <rect width="18" height="12" x="3" y="8" rx="2"></rect>
+                                            </svg>
+                                            <span>{{ $category->updated_at->format('M j, Y') }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                        <div class="relative inline-block text-left">
+                                            <button type="button"
+                                                class="inline-flex items-center justify-center w-8 h-8 text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                onclick="toggleCategoryDropdown(event, 'category-dropdown-{{ $category->id }}', this)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="12" r="1"></circle>
+                                                    <circle cx="12" cy="5" r="1"></circle>
+                                                    <circle cx="12" cy="19" r="1"></circle>
+                                                </svg>
+                                            </button>
+                                            <div id="category-dropdown-{{ $category->id }}"
+                                                class="hidden fixed z-50 w-48 bg-white border border-gray-200 rounded-md shadow-lg"
+                                                onclick="event.stopPropagation()" style="display: none;">
+                                                <div class="py-1">
+                                                    <a href="{{ route('admin.categories.show', $category) }}"
+                                                        class="flex items-center px-4 py-2 text-sm text-gray-700 transition hover:bg-blue-50 hover:text-blue-700">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                            height="16" viewBox="0 0 24 24" fill="none"
+                                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" class="mr-2">
+                                                            <circle cx="12" cy="12" r="10" />
+                                                            <path d="M12 16v.01" />
+                                                            <path d="M12 8v4" />
+                                                        </svg>
+                                                        View details
+                                                    </a>
+                                                    <a href="{{ route('admin.categories.edit', $category) }}"
+                                                        class="flex items-center px-4 py-2 text-sm text-gray-700 transition hover:bg-blue-50 hover:text-blue-700">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                            height="16" viewBox="0 0 24 24" fill="none"
+                                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" class="mr-2">
+                                                            <path d="M12 20h9" />
+                                                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                                                        </svg>
+                                                        Edit category
+                                                    </a>
+                                                    <form action="{{ route('admin.categories.destroy', $category) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Delete {{ $category->name }}? This will NOT delete articles.');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="flex w-full items-center px-4 py-2 text-sm text-rose-600 transition hover:bg-rose-50 hover:text-rose-700">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="16" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="mr-2">
+                                                                <polyline points="3 6 5 6 21 6" />
+                                                                <path
+                                                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                                            </svg>
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="p-6 text-center text-sm text-gray-500">
+                                        No categories yet. Create the first one!
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-                                <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="inline">
-                                    @csrf @method('DELETE')
-                                    <button type="submit"
-                                            onclick="return confirm('Delete {{ $category->name }}? This will NOT delete articles.')"
-                                            class="text-red-600 hover:text-red-900">
-                                        Delete
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="px-6 py-12 text-center text-gray-500">
-                                No categories yet. Create the first one!
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        <div class="mt-6">
-            {{ $categories->links() }}
+            @if ($categories->hasPages())
+                <div class="rounded-lg border border-gray-200 bg-white px-4 py-3">
+                    <div class="flex flex-col gap-3 text-sm text-gray-700 sm:flex-row sm:items-center sm:justify-between">
+                        <span>Showing {{ $categories->firstItem() ?? 0 }} to {{ $categories->lastItem() ?? 0 }} of
+                            {{ $categories->total() }} results</span>
+                        <div class="flex items-center space-x-2">
+                            {{ $categories->links() }}
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
-</div>
+
+    <script>
+        function toggleCategoryDropdown(evt, dropdownId, buttonElement) {
+            evt.stopPropagation();
+
+            document.querySelectorAll('[id^="category-dropdown-"]').forEach(dropdown => {
+                if (dropdown.id !== dropdownId) {
+                    dropdown.classList.add('hidden');
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            const dropdown = document.getElementById(dropdownId);
+            const button = buttonElement || evt.currentTarget;
+
+            if (dropdown.classList.contains('hidden')) {
+                const rect = button.getBoundingClientRect();
+                const dropdownWidth = 192;
+                const dropdownHeight = 140;
+
+                let left = rect.right - dropdownWidth;
+                let top = rect.bottom + 8;
+
+                if (left < 10) {
+                    left = rect.left;
+                }
+                if (top + dropdownHeight > window.innerHeight - 10) {
+                    top = rect.top - dropdownHeight - 8;
+                }
+
+                dropdown.style.left = `${left}px`;
+                dropdown.style.top = `${top}px`;
+                dropdown.style.display = 'block';
+                dropdown.classList.remove('hidden');
+            } else {
+                dropdown.classList.add('hidden');
+                dropdown.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('click', function(event) {
+            const isInsideDropdown = event.target.closest('[id^="category-dropdown-"]') ||
+                event.target.closest('button[onclick*="toggleCategoryDropdown"]');
+
+            if (!isInsideDropdown) {
+                document.querySelectorAll('[id^="category-dropdown-"]').forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                    dropdown.style.display = 'none';
+                });
+            }
+        });
+
+        ['scroll', 'resize'].forEach(eventType => {
+            window.addEventListener(eventType, () => {
+                document.querySelectorAll('[id^="category-dropdown-"]').forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                    dropdown.style.display = 'none';
+                });
+            });
+        });
+    </script>
 @endsection

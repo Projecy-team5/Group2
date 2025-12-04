@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class ArticleController extends Controller
 {
@@ -36,8 +37,12 @@ class ArticleController extends Controller
         ]);
 
         // NOW process the published logic AFTER validation
-        $published = $request->boolean('published', false);
-        $publishedAt = $published ? ($request->published_at ?? now()) : null;
+        $published = $request->boolean('published', true);
+        $publishedAt = $published
+            ? ($request->filled('published_at')
+                ? Carbon::parse($request->input('published_at'))->startOfDay()
+                : now())
+            : null;
 
         $article = Article::create([
             'title'        => $request->title,
@@ -71,8 +76,12 @@ class ArticleController extends Controller
             'published_at'=> 'nullable|date',
         ]);
 
-        $published = $request->boolean('published', false);
-        $publishedAt = $published ? ($request->published_at ?? now()) : null;
+        $published = $request->boolean('published', true);
+        $publishedAt = $published
+            ? ($request->filled('published_at')
+                ? Carbon::parse($request->input('published_at'))->startOfDay()
+                : now())
+            : null;
 
         $article->update([
             'title'        => $request->title,

@@ -38,4 +38,9 @@ class Scholarship extends Model
     {
         return $this->hasMany(\App\Models\ScholarshipImage::class);
     }
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
 }

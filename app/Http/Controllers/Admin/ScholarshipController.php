@@ -8,16 +8,41 @@ use Illuminate\Http\Request;
 use App\Models\Scholarship;
 use App\Models\ScholarshipImage;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class ScholarshipController extends Controller
 {
     /**
      * Show the form for creating a new scholarship.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $scholarships = Scholarship::paginate(10);
-        return view('admin.scholarships.index', compact('scholarships'));
+        $filters = $request->only(['name', 'country', 'status', 'start_date', 'end_date']);
+
+        $scholarships = Scholarship::query()
+            ->when($request->filled('name'), function ($query) use ($request) {
+                $query->where('scholarship_name', 'like', '%' . $request->name . '%');
+            })
+            ->when($request->filled('country'), function ($query) use ($request) {
+                $query->where('country', 'like', '%' . $request->country . '%');
+            })
+            ->when($request->filled('status') && $request->status !== 'all', function ($query) use ($request) {
+                $query->where('status', $request->status);
+            })
+            ->when($request->filled('start_date') && $request->filled('end_date'), function ($query) use ($request) {
+                try {
+                    $start = Carbon::parse($request->start_date)->startOfDay();
+                    $end = Carbon::parse($request->end_date)->endOfDay();
+                    $query->whereBetween('application_deadline', [$start, $end]);
+                } catch (\Exception $e) {
+                    // Ignore invalid date formats to avoid crashing the page
+                }
+            })
+            ->orderByDesc('created_at')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('admin.scholarships.index', compact('scholarships', 'filters'));
     }
     public function create()
     {
