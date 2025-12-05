@@ -1,9 +1,13 @@
 @extends('layouts.homepage')
 @section('content')
+    @php
+        $sharedSettings = $businessSettings ?? null;
+        $brandName = $sharedSettings?->name ?? config('app.name', 'ScholarshipHub');
+    @endphp
     {{-- Hero Section --}}
     <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-20">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <h1 class="text-5xl font-bold mb-4">About ScholarshipHub</h1>
+            <h1 class="text-5xl font-bold mb-4">About {{ $brandName }}</h1>
             <p class="text-xl mb-8">Your platform for discovering educational funding opportunities.</p>
         </div>
     </div>
@@ -14,7 +18,7 @@
             <div class="max-w-3xl mx-auto text-center">
                 <h2 class="text-3xl font-bold text-gray-900 mb-6">Our Mission</h2>
                 <p class="text-lg text-gray-600 leading-relaxed mb-8">
-                    ScholarshipHub is dedicated to helping students find and apply for scholarships that match their
+                    {{ $brandName }} is dedicated to helping students find and apply for scholarships that match their
                     educational goals. We provide a centralized platform where students can explore various funding
                     opportunities and manage their applications efficiently.
                 </p>

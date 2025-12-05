@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\ScholarshipController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\BusinessSettingController;
 use App\Http\Controllers\FrontendScholarshipController;
 use App\Http\Controllers\GeminiController;
 use App\Http\Controllers\ApplicationController;
@@ -18,6 +19,13 @@ use App\Models\Scholarship;
 Route::get('/', function () {
     return view('frontend.home');
 })->name('home');
+
+Route::post('/locale/{locale}', function (string $locale) {
+    session(['app_locale' => $locale]);
+    app()->setLocale($locale);
+
+    return response()->json(['status' => 'ok']);
+})->name('locale.switch');
 
 Route::get('/about', function () {
     return view('frontend.about');
@@ -140,6 +148,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Applications
     Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
+
+    // Business Settings
+    Route::get('/business-settings', [BusinessSettingController::class, 'edit'])->name('business-settings.edit');
+    Route::put('/business-settings', [BusinessSettingController::class, 'update'])->name('business-settings.update');
 });
 
 // Apply to scholarship (user)

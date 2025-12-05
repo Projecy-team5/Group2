@@ -1,5 +1,9 @@
 @extends('layouts.homepage')
 @section('content')
+    @php
+        $sharedSettings = $businessSettings ?? null;
+        $brandName = $sharedSettings?->name ?? config('app.name', 'ScholarshipHub');
+    @endphp
     {{-- Hero Section --}}
     <div class="relative overflow-hidden bg-gradient-to-br from-indigo-900 to-purple-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
@@ -35,7 +39,7 @@
     <div class="bg-gray-50 py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-fade-in">Why Choose ScholarshipHub?</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-fade-in">Why Choose {{ $brandName }}?</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">We make finding and applying for scholarships simple and organized.</p>
             </div>
             <div class="grid md:grid-cols-3 gap-8">

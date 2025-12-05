@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    @php
+        $sharedSettings = $businessSettings ?? null;
+        $brandName = $sharedSettings?->name ?? config('app.name', 'ScholarshipHub');
+        $brandLogo = $sharedSettings?->logo_url;
+        $faviconUrl = $sharedSettings?->favicon_url ?? asset('favicon.ico');
+        $defaultFooterCopy = 'Your platform for discovering educational funding opportunities. We help students find and apply for scholarships.';
+        $footerCopy = $sharedSettings?->footer_text ?? $defaultFooterCopy;
+    @endphp
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'ScholarshipHub') }}</title>
+    <title>{{ $brandName }}</title>
+    <link rel="icon" type="image/png" href="{{ $faviconUrl }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
@@ -41,18 +50,22 @@
         .nav-link {
             position: relative;
             transition: color 0.3s ease;
+            padding-bottom: 4px;
         }
         .nav-link::after {
             content: '';
             position: absolute;
             width: 0;
-            height: 2px;
-            bottom: -2px;
+            height: 3px;
+            bottom: -20px;
             left: 0;
-            background: linear-gradient(135deg, #5a67d8, #9f7aea);
+            background: #3b82f6;
             transition: width 0.3s ease;
         }
         .nav-link:hover::after {
+            width: 100%;
+        }
+        .nav-link.active::after {
             width: 100%;
         }
         .dropdown {
@@ -88,14 +101,21 @@
             <div class="flex justify-between items-center h-16">
                 {{-- Left --}}
                 <div class="flex items-center">
-                    <a href="{{ url(path: '/') }}" class="text-2xl sm:text-3xl font-extrabold text-gradient">ScholarshipHub</a>
+                    <a href="{{ url(path: '/') }}" class="flex items-center gap-3">
+                        @if ($brandLogo)
+                            <img src="{{ $brandLogo }}" alt="{{ $brandName }} logo" class="h-10 w-auto object-contain">
+                            <span class="text-2xl sm:text-3xl font-extrabold text-gradient hidden sm:inline">{{ $brandName }}</span>
+                        @else
+                            <span class="text-2xl sm:text-3xl font-extrabold text-gradient">{{ $brandName }}</span>
+                        @endif
+                    </a>
                     <div class="hidden md:block ml-12">
                         <div class="flex space-x-8">
-                            <a href="{{ url(path: '/') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Home</a>
+                            <a href="{{ url(path: '/') }}" class="nav-link {{ request()->is('/') ? 'active text-indigo-600' : 'text-gray-700' }} hover:text-indigo-600 font-medium text-sm">Home</a>
 
                             {{-- Scholarships Dropdown --}}
                             <div x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" class="relative">
-                                <a href="{{ url('/scholarships') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm flex items-center gap-1">
+                                <a href="{{ url('/scholarships') }}" class="nav-link {{ request()->is('scholarships*') ? 'active text-indigo-600' : 'text-gray-700' }} hover:text-indigo-600 font-medium text-sm flex items-center gap-1">
                                     Scholarships
                                     <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -140,9 +160,9 @@
                                 </div>
                             </div>
 
-                            <a href="{{ url('/about') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">About</a>
-                            <a href="{{ url('/articles') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Resources</a>
-                            <a href="{{ url('/contact') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Contact</a>
+                            <a href="{{ url('/about') }}" class="nav-link {{ request()->is('about') ? 'active text-indigo-600' : 'text-gray-700' }} hover:text-indigo-600 font-medium text-sm">About</a>
+                            <a href="{{ url('/articles') }}" class="nav-link {{ request()->is('articles*') || request()->is('category*') ? 'active text-indigo-600' : 'text-gray-700' }} hover:text-indigo-600 font-medium text-sm">Resources</a>
+                            <a href="{{ url('/contact') }}" class="nav-link {{ request()->is('contact') ? 'active text-indigo-600' : 'text-gray-700' }} hover:text-indigo-600 font-medium text-sm">Contact</a>
                         </div>
                     </div>
                 </div>
@@ -220,10 +240,15 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 {{-- About --}}
                 <div class="md:col-span-2">
-                    <h3 class="text-2xl font-bold mb-4">ScholarshipHub</h3>
+                    <h3 class="text-2xl font-bold mb-4">{{ $brandName }}</h3>
                     <p class="text-gray-400 text-sm leading-relaxed mb-4">
-                        Your platform for discovering educational funding opportunities. We help students find and apply for scholarships.
+                        {{ $footerCopy }}
                     </p>
+                    @if ($sharedSettings?->address)
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            {{ $sharedSettings->address }}
+                        </p>
+                    @endif
                 </div>
 
                 {{-- Quick Links --}}
@@ -242,19 +267,31 @@
                     <h4 class="font-semibold text-lg mb-4">Contact</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
                         <li><a href="{{ url('/contact') }}" class="hover:text-white transition-colors">Contact Us</a></li>
-                        <li class="flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                            info@scholarshiphub.com
-                        </li>
+                        @if ($sharedSettings?->email)
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                                {{ $sharedSettings->email }}
+                            </li>
+                        @endif
+                        @if ($sharedSettings?->phone)
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 5a2 2 0 012-2h1.27a2 2 0 011.94 1.52l.65 2.6a2 2 0 01-.58 1.94l-1.1 1.1a16 16 0 006.35 6.35l1.1-1.1a2 2 0 011.94-.58l2.6.65A2 2 0 0121 19.73V21a2 2 0 01-2 2 18 18 0 01-16-16 2 2 0 012-2z"></path>
+                                </svg>
+                                {{ $sharedSettings->phone }}
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>
 
             {{-- Bottom Bar --}}
             <div class="border-t border-gray-800 mt-8 pt-8 text-center">
-                <p class="text-gray-400 text-sm">&copy; {{ date('Y') }} ScholarshipHub. All rights reserved.</p>
+                <p class="text-gray-400 text-sm">&copy; {{ date('Y') }} {{ $brandName }}. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -463,5 +500,6 @@
         });
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @stack('scripts')
 </body>
 </html>

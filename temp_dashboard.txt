@@ -9,8 +9,12 @@
         $faviconUrl = $sharedSettings?->favicon_url ?? asset('favicon.ico');
         $authUser = Auth::user();
         $isAdminUser = $authUser && method_exists($authUser, 'isAdmin') ? $authUser->isAdmin() : false;
-        $userRoleLabel = $authUser ? optional($authUser->role)->name ?? ($isAdminUser ? 'Admin' : 'User') : null;
-        $unreadContactCount = $isAdminUser ? \App\Models\Contact::where('is_read', false)->count() : 0;
+        $userRoleLabel = $authUser
+            ? (optional($authUser->role)->name ?? ($isAdminUser ? 'Admin' : 'User'))
+            : null;
+        $unreadContactCount = $isAdminUser
+            ? \App\Models\Contact::where('is_read', false)->count()
+            : 0;
         $recentUnreadContacts = $isAdminUser
             ? \App\Models\Contact::where('is_read', false)->latest()->take(5)->get()
             : collect();
@@ -20,10 +24,8 @@
         ]);
         $currentLanguage = session('app_locale', 'en');
         $flagIcons = [
-            'gb' =>
-                '<svg viewBox="0 0 32 20" width="28" height="18" class="rounded shadow"><rect width="32" height="20" fill="#012169"/><path d="M0 0 L32 20 M32 0 L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0 L32 20 M32 0 L0 20" stroke="#C8102E" stroke-width="2"/><rect x="14" width="4" height="20" fill="#fff"/><rect y="8" width="32" height="4" fill="#fff"/><rect x="15" width="2" height="20" fill="#C8102E"/><rect y="9" width="32" height="2" fill="#C8102E"/></svg>',
-            'kh' =>
-                '<svg viewBox="0 0 32 20" width="28" height="18" class="rounded shadow"><rect width="32" height="20" fill="#032ea1"/><rect y="4" width="32" height="12" fill="#e00034"/><path d="M16 6l6 6h-3v2h-6v-2h-3z" fill="#fff"/></svg>',
+            'gb' => '<svg viewBox="0 0 32 20" width="28" height="18" class="rounded shadow"><rect width="32" height="20" fill="#012169"/><path d="M0 0 L32 20 M32 0 L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0 L32 20 M32 0 L0 20" stroke="#C8102E" stroke-width="2"/><rect x="14" width="4" height="20" fill="#fff"/><rect y="8" width="32" height="4" fill="#fff"/><rect x="15" width="2" height="20" fill="#C8102E"/><rect y="9" width="32" height="2" fill="#C8102E"/></svg>',
+            'kh' => '<svg viewBox="0 0 32 20" width="28" height="18" class="rounded shadow"><rect width="32" height="20" fill="#032ea1"/><rect y="4" width="32" height="12" fill="#e00034"/><path d="M16 6l6 6h-3v2h-6v-2h-3z" fill="#fff"/></svg>',
         ];
         $renderFlag = fn(string $code) => $flagIcons[$code] ?? $flagIcons['gb'];
     @endphp
@@ -58,8 +60,8 @@
             <button type="button" class="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                 data-sidebar-close aria-label="Close sidebar">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
         </div>
@@ -86,7 +88,8 @@
                 </a>
             </div>
             <div class="pt-2">
-                <h3 class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-hover-show">
+                <h3
+                    class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-hover-show">
                     Management
                 </h3>
                 <div class="mt-2 space-y-1">
@@ -95,8 +98,8 @@
                         @if (request()->routeIs('admin.users.*')) text-primary bg-primary/10 border border-primary/20
                         @else
                             text-gray-600 hover:bg-gray-100 hover:text-gray-900 @endif">
-                        <svg class="w-5 h-5 flex-shrink-0 @if (request()->routeIs('admin.users.*')) text-primary @endif"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 flex-shrink-0 @if (request()->routeIs('admin.users.*')) text-primary @endif" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z">
                             </path>
@@ -108,8 +111,8 @@
                         @if (request()->routeIs('admin.roles.*')) text-primary bg-primary/10 border border-primary/20
                         @else
                             text-gray-600 hover:bg-gray-100 hover:text-gray-900 @endif">
-                        <svg class="w-5 h-5 flex-shrink-0 @if (request()->routeIs('admin.roles.*')) text-primary @endif"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 flex-shrink-0 @if (request()->routeIs('admin.roles.*')) text-primary @endif" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 2l7 4v6c0 5-3.8 9.4-7 10-3.2-.6-7-5-7-10V6l7-4z"></path>
                         </svg>
@@ -131,8 +134,8 @@
                         @if (request()->routeIs('admin.scholarships.*')) text-primary bg-primary/10 border border-primary/20
                         @else
                             text-gray-600 hover:bg-gray-100 hover:text-gray-900 @endif">
-                        <svg class="w-5 h-5 flex-shrink-0 @if (request()->routeIs('admin.scholarships.*')) text-primary @endif"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 flex-shrink-0 @if (request()->routeIs('admin.scholarships.*')) text-primary @endif" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
@@ -143,8 +146,8 @@
                         @if (request()->routeIs('admin.articles.*')) text-primary bg-primary/10 border border-primary/20
                         @else
                             text-gray-600 hover:bg-gray-100 hover:text-gray-900 @endif">
-                        <svg class="w-5 h-5 flex-shrink-0 @if (request()->routeIs('admin.articles.*')) text-primary @endif"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 flex-shrink-0 @if (request()->routeIs('admin.articles.*')) text-primary @endif" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
@@ -155,8 +158,8 @@
                         @if (request()->routeIs('admin.categories.*')) text-primary bg-primary/10 border border-primary/20
                         @else
                             text-gray-600 hover:bg-gray-100 hover:text-gray-900 @endif">
-                        <svg class="w-5 h-5 flex-shrink-0 @if (request()->routeIs('admin.categories.*')) text-primary @endif"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 flex-shrink-0 @if (request()->routeIs('admin.categories.*')) text-primary @endif" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
@@ -167,16 +170,14 @@
                         @if (request()->routeIs('admin.contacts.*')) text-primary bg-primary/10 border border-primary/20
                         @else
                             text-gray-600 hover:bg-gray-100 hover:text-gray-900 @endif">
-                        <svg class="w-5 h-5 flex-shrink-0 @if (request()->routeIs('admin.contacts.*')) text-primary @endif"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 flex-shrink-0 @if (request()->routeIs('admin.contacts.*')) text-primary @endif" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                            </path>
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                         </svg>
                         <span class="sidebar-label">Contact Messages</span>
-                        @if (($unreadContactCount ?? 0) > 0)
-                            <span
-                                class="ml-auto inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                        @if(($unreadContactCount ?? 0) > 0)
+                            <span class="ml-auto inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
                                 {{ min($unreadContactCount, 99) }}
                             </span>
                         @endif
@@ -205,189 +206,267 @@
             </div>
         </nav>
     </aside>
-
     <main id="dashboardMain" class="min-h-screen transition-[margin-left] duration-300 ease-in-out lg:ml-0">
-        
-<header class="bg-white border-b border-gray-200 px-6 py-4">
-    <div class="flex items-center justify-between gap-4">
-        <button type="button"
-            class="p-2 text-gray-600 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary"
-            data-sidebar-toggle aria-label="Toggle sidebar" aria-expanded="false">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-        </button>
-        <div class="flex items-center gap-4">
-            <div class="relative">
-                <button type="button" id="languageToggle" aria-haspopup="true" aria-expanded="false"
-                    data-locale-endpoint="{{ url('/locale') }}"
-                    class="inline-flex items-center justify-center w-11 h-11 rounded-full border border-gray-200 bg-white shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary transition">
-                    @php
-                        $currentFlag = $availableLanguages->firstWhere('code', $currentLanguage);
-                        $flagCode = $currentFlag['flag'] ?? 'gb';
-                    @endphp
-                    <span class="sr-only">{{ $currentFlag['label'] ?? 'English' }}</span>
-                    {!! $renderFlag($flagCode) !!}
+        <header class="bg-white border-b border-gray-200 px-6 py-4">
+            <div class="flex items-center justify-between gap-4">
+                <button type="button"
+                    class="p-2 text-gray-600 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary"
+                    data-sidebar-toggle aria-label="Toggle sidebar" aria-expanded="false">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
                 </button>
-                <div id="languagePanel"
-                    class="hidden absolute right-0 mt-4 w-44 z-40 rounded-2xl border border-gray-100 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.15)] overflow-hidden">
-                    @foreach ($availableLanguages as $language)
-                        <button type="button"
-                            class="language-option w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold transition {{ $currentLanguage === $language['code'] ? 'bg-primary text-white' : 'text-gray-700 hover:bg-primary/5' }}"
-                            data-lang="{{ $language['code'] }}">
-                            <span class="flex items-center justify-center w-7 h-5">
-                                {!! $renderFlag($language['flag']) !!}
-                            </span>
-                            {{ $language['label'] }}
-                        </button>
-                    @endforeach
-                </div>
-            </div>
-
-            @if ($isAdminUser)
-                <div class="relative">
-                    <button type="button" id="notificationToggle" aria-haspopup="true" aria-expanded="false"
-                        class="relative flex items-center justify-center w-12 h-12 text-gray-500 hover:text-primary rounded-full border border-gray-200 bg-white shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-9.33-4.987 6 6 0 00-2.67 4.987v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0a3 3 0 11-6 0m6 0H9" />
-                        </svg>
-                        @if ($unreadContactCount > 0)
-                            <span
-                                class="absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[1.35rem] px-1.5 text-xs font-semibold text-white bg-yellow-500 rounded-full shadow">
-                                {{ min($unreadContactCount, 99) }}
-                            </span>
-                        @endif
-                    </button>
-                    <div id="notificationPanel"
-                        class="hidden absolute right-0 mt-4 w-[420px] max-w-[90vw] z-40 rounded-3xl border border-gray-100 bg-white shadow-[0_25px_80px_rgba(15,23,42,0.18)] overflow-hidden">
-                        <div class="px-6 pt-5 pb-4 bg-white">
-                            <div class="flex items-start justify-between">
-                                <div>
-                                    <p class="text-sm font-semibold text-gray-900">Contact Messages</p>
-                                    <p class="text-xs text-gray-500">{{ $unreadContactCount > 0 ? 'Unanswered contacts waiting' : "You're all caught up" }}</p>
-                                </div>
+                    @if ($isAdminUser)
+                        <div class="relative">
+                            <button type="button" id="notificationToggle" aria-haspopup="true" aria-expanded="false"
+                                class="relative flex items-center justify-center w-12 h-12 text-gray-500 hover:text-primary rounded-full border border-gray-200 bg-white shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary transition">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-9.33-4.987 6 6 0 00-2.67 4.987v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0a3 3 0 11-6 0m6 0H9" />
+                                </svg>
                                 @if ($unreadContactCount > 0)
                                     <span
-                                        class="inline-flex items-center justify-center px-2 py-1 text-xs font-semibold text-white bg-primary rounded-full">
+                                        class="absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[1.35rem] px-1.5 text-xs font-semibold text-white bg-yellow-500 rounded-full shadow">
                                         {{ min($unreadContactCount, 99) }}
                                     </span>
                                 @endif
-                            </div>
-                        </div>
-                        <div class="px-6 pb-4 space-y-4 max-h-80 overflow-y-auto bg-white">
-                            @forelse ($recentUnreadContacts as $contact)
-                                <div class="flex gap-4 rounded-2xl border border-gray-100 bg-white shadow-sm p-4">
-                                    <div class="w-12 h-12 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center">
-                                        {{ strtoupper(substr($contact->name ?? 'N', 0, 1)) }}
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex items-start justify-between gap-3">
-                                            <div>
-                                                <p class="text-sm font-semibold text-gray-900">{{ $contact->name }}</p>
-                                                <p class="text-xs text-gray-500">{{ $contact->email }}</p>
-                                            </div>
-                                            <span class="text-xs text-gray-400 whitespace-nowrap">
-                                                {{ optional($contact->created_at)->diffForHumans() }}
+                            </button>
+                            <div id="notificationPanel"
+                                class="hidden absolute right-0 mt-4 w-[420px] max-w-[90vw] z-40 rounded-3xl border border-gray-100 bg-white shadow-[0_25px_80px_rgba(15,23,42,0.18)] overflow-hidden">
+                                <div class="px-6 pt-5 pb-4 bg-white">
+                                    <div class="flex items-start justify-between">
+                                        <div>
+                                            <p class="text-sm font-semibold text-gray-900">Contact Messages</p>
+                                            <p class="text-xs text-gray-500">{{ $unreadContactCount > 0 ? 'Unanswered contacts waiting' : "You're all caught up" }}</p>
+                                        </div>
+                                        @if ($unreadContactCount > 0)
+                                            <span
+                                                class="inline-flex items-center justify-center px-2 py-1 text-xs font-semibold text-white bg-primary rounded-full">
+                                                {{ min($unreadContactCount, 99) }}
                                             </span>
-                                        </div>
-                                        <p class="mt-3 text-sm text-gray-600 leading-relaxed">
-                                            {{ \Illuminate\Support\Str::limit($contact->message, 140) }}
-                                        </p>
-                                        <div class="mt-4 flex items-center justify-between">
-                                            <a href="mailto:{{ $contact->email }}"
-                                                class="inline-flex items-center gap-1 rounded-full bg-blue-50 text-blue-600 px-3 py-1 text-xs font-semibold">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                                </svg>
-                                                Reply
-                                            </a>
-                                            <a href="{{ route('admin.contacts.show', $contact) }}"
-                                                class="text-xs font-semibold text-primary hover:text-primary/80">
-                                                View message ?
-                                            </a>
-                                        </div>
+                                        @endif
                                     </div>
                                 </div>
-                            @empty
-                                <div class="py-10 text-center text-sm text-gray-500">No unread contact messages.</div>
-                            @endforelse
-                        </div>
-                        <div class="border-t bg-gray-50 px-6 py-3 text-center">
-                            <a href="{{ route('admin.contacts.index') }}"
-                                class="inline-flex items-center justify-center text-sm font-semibold text-primary hover:text-primary/80">
-                                See all messages
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-            @auth
-                <div class="relative">
-                    <button type="button" id="profileMenuToggle" aria-haspopup="true" aria-expanded="false"
-                        class="flex items-center gap-2 rounded-full border border-gray-200 bg-white shadow-sm pr-3 pl-1 py-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary">
-                        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                            <img class="w-10 h-10 rounded-full object-cover border-2 border-white shadow"
-                                src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}">
-                        @else
-                            <div
-                                class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-base font-semibold shadow">
-                                {{ substr(Auth::user()->name, 0, 1) }}
+                                <div class="px-6 pb-4 space-y-4 max-h-80 overflow-y-auto bg-white">
+                                    @forelse ($recentUnreadContacts as $contact)
+                                        <div class="flex gap-4 rounded-2xl border border-gray-100 bg-white shadow-sm p-4">
+                                            <div class="w-12 h-12 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center">
+                                                {{ strtoupper(substr($contact->name ?? 'N', 0, 1)) }}
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="flex items-start justify-between gap-3">
+                                                    <div>
+                                                        <p class="text-sm font-semibold text-gray-900">{{ $contact->name }}</p>
+                                                        <p class="text-xs text-gray-500">{{ $contact->email }}</p>
+                                                    </div>
+                                                    <span class="text-xs text-gray-400 whitespace-nowrap">
+                                                        {{ optional($contact->created_at)->diffForHumans() }}
+                                                    </span>
+                                                </div>
+                                                <div class="mt-3 flex items-center text-xs text-gray-500 gap-2">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10m-11 8h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                    <span>{{ optional($contact->created_at)->format('M d, Y - h:i A') }}</span>
+                                                </div>
+                                                <p class="mt-3 text-sm text-gray-600 leading-relaxed">
+                                                    {{ \Illuminate\Support\Str::limit($contact->message, 140) }}
+                                                </p>
+                                                <div class="mt-4 flex items-center justify-between">
+                                                    <a href="mailto:{{ $contact->email }}"
+                                                        class="inline-flex items-center gap-1 rounded-full bg-blue-50 text-blue-600 px-3 py-1 text-xs font-semibold">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                        </svg>
+                                                        Reply
+                                                    </a>
+                                                    <a href="{{ route('admin.contacts.show', $contact) }}"
+                                                        class="text-xs font-semibold text-primary hover:text-primary/80">
+                                                        View message ?
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div class="py-10 text-center text-sm text-gray-500">No unread contact messages.</div>
+                                    @endforelse
+                                </div>
+                                <div class="border-t bg-gray-50 px-6 py-3 text-center">
+                                    <a href="{{ route('admin.contacts.index') }}"
+                                        class="inline-flex items-center justify-center text-sm font-semibold text-primary hover:text-primary/80">
+                                        See all messages
+                                    </a>
+                                </div>
                             </div>
-                        @endif
-                        <div class="hidden sm:block text-left">
-                            <p class="text-xs font-semibold text-gray-900 leading-tight">{{ Auth::user()->name }}</p>
-                            <p class="text-[11px] text-gray-500">{{ $userRoleLabel }}</p>
                         </div>
-                    </button>
-                    <div id="profileMenuPanel"
-                        class="hidden absolute right-0 mt-3 w-64 z-50 drop-shadow-2xl rounded-2xl overflow-hidden bg-white">
-                        <div class="bg-primary text-white text-center px-6 py-6">
-                            <div class="mx-auto w-20 h-20 rounded-full border-4 border-white bg-white/20 flex items-center justify-center mb-3">
+                    @endif
+                    @endif
+                            </button>
+                            <div id="notificationPanel"
+                                class="hidden absolute right-0 mt-3 w-96 max-w-full z-40 drop-shadow-2xl rounded-2xl overflow-hidden bg-white">
+                                <div class="px-6 py-4 bg-white border-b border-gray-100 flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-900">Contact Messages</p>
+                                        <p class="text-xs text-gray-500">
+                                            @if ($unreadContactCount > 0)
+                                                {{ $unreadContactCount }} unread message{{ $unreadContactCount === 1 ? '' : 's' }}
+                                            @else
+                                                You're all caught up!
+                                            @endif
+                                        </p>
+                                    </div>
+                                    @if ($unreadContactCount > 0)
+                                        <span
+                                            class="inline-flex items-center justify-center px-2 py-1 text-xs font-semibold text-white bg-red-500 rounded-full">
+                                            {{ min($unreadContactCount, 99) }}
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="max-h-80 overflow-y-auto divide-y divide-gray-100 bg-white">
+                                    @forelse ($recentUnreadContacts as $contact)
+                                        <div class="p-5 flex gap-4">
+                                            <div
+                                                class="w-12 h-12 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center">
+                                                {{ strtoupper(substr($contact->name ?? 'N', 0, 1)) }}
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="flex items-start justify-between gap-2">
+                                                    <div>
+                                                        <p class="text-sm font-semibold text-gray-900">{{ $contact->name }}</p>
+                                                        <p class="text-xs text-gray-500">{{ $contact->email }}</p>
+                                                    </div>
+                                        <span class="text-xs text-gray-400 whitespace-nowrap">
+                                            {{ optional($contact->created_at)->diffForHumans() }}
+                                        </span>
+                                                </div>
+                                                <p class="mt-3 text-xs text-gray-600 leading-relaxed">
+                                                    {{ \Illuminate\Support\Str::limit($contact->message, 110) }}
+                                                </p>
+                                                <div class="mt-4 flex flex-wrap gap-2">
+                                                    <a href="mailto:{{ $contact->email }}"
+                                                        class="inline-flex items-center gap-1 rounded-full bg-blue-50 text-blue-600 px-3 py-1 text-xs font-semibold">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8" />
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                        </svg>
+                                                        {{ $contact->email }}
+                                                    </a>
+                                                    <span
+                                                        class="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-600 px-3 py-1 text-xs font-semibold">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2m-12 0H4" />
+                                                        </svg>
+                                                        {{ optional($contact->created_at)->format('M d, Y h:i A') }}
+                                                    </span>
+                                                </div>
+                                                <div class="mt-4">
+                                                    <a href="{{ route('admin.contacts.show', $contact) }}"
+                                                        class="inline-flex items-center text-xs font-semibold text-primary hover:text-primary/80">
+                                                        See message
+                                                        <svg class="w-3.5 h-3.5 ml-1" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M9 5l7 7-7 7" />
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <div class="p-6 text-center text-sm text-gray-500">
+                                            No unread contact messages.
+                                        </div>
+                                    @endforelse
+                                </div>
+                                <div class="bg-gray-50 px-6 py-3 text-center">
+                                    <a href="{{ route('admin.contacts.index') }}"
+                                        class="inline-flex items-center justify-center text-sm font-semibold text-primary hover:text-primary/80">
+                                        See all messages
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    @auth
+                        @php
+                            $authUser = Auth::user();
+                            $userRoleLabel = optional($authUser->role)->name ?? ($authUser?->isAdmin() ? 'Admin' : 'User');
+                        @endphp
+                        <div class="relative">
+                            <button type="button" id="profileMenuToggle" aria-haspopup="true" aria-expanded="false"
+                                class="flex items-center gap-2 rounded-full border border-gray-200 bg-white shadow-sm pr-3 pl-1 py-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary">
                                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                                    <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}"
-                                        class="w-16 h-16 rounded-full object-cover border-2 border-white">
+                                    <img class="w-10 h-10 rounded-full object-cover border-2 border-white shadow"
+                                        src="{{ $authUser->profile_photo_url }}" alt="{{ $authUser->name }}">
                                 @else
-                                    <span class="text-2xl font-semibold">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white text-base font-semibold shadow">
+                                        {{ substr($authUser->name, 0, 1) }}
+                                    </div>
                                 @endif
+                                <div class="hidden sm:block text-left">
+                                    <p class="text-xs font-semibold text-gray-900 leading-tight">{{ $authUser->name }}</p>
+                                    <p class="text-[11px] text-gray-500">{{ $userRoleLabel }}</p>
+                                </div>
+                            </button>
+                            <div id="profileMenuPanel"
+                                class="hidden absolute right-0 mt-3 w-64 z-50 drop-shadow-2xl rounded-2xl overflow-hidden bg-white">
+                                <div class="bg-primary text-white text-center px-6 py-6">
+                                    <div class="mx-auto w-20 h-20 rounded-full border-4 border-white bg-white/20 flex items-center justify-center mb-3">
+                                        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                                            <img src="{{ $authUser->profile_photo_url }}" alt="{{ $authUser->name }}"
+                                                class="w-16 h-16 rounded-full object-cover border-2 border-white">
+                                        @else
+                                            <span class="text-2xl font-semibold">{{ substr($authUser->name, 0, 1) }}</span>
+                                        @endif
+                                    </div>
+                                    <p class="text-xl font-semibold">{{ $authUser->name }}</p>
+                                    <p class="text-sm text-white/80 mt-1">{{ $userRoleLabel }}</p>
+                                    <p class="text-xs text-white/80">{{ $authUser->email }}</p>
+                                </div>
+                                <div class="bg-gray-50 px-6 py-4 grid grid-cols-2 gap-3">
+                                    @if (Route::has('profile.show'))
+                                        <a href="{{ route('profile.show') }}"
+                                            class="inline-flex items-center justify-center gap-2 rounded-md bg-cyan-600 text-white text-xs font-semibold py-2 hover:bg-cyan-500 transition">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                    d="M5.121 17.804A4 4 0 017 17h10a4 4 0 011.879.804L21 19H3l2.121-1.196zM15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                            Profile
+                                        </a>
+                                    @else
+                                        <a href="{{ route('admin.business-settings.edit') }}"
+                                            class="inline-flex items-center justify-center gap-2 rounded-md bg-cyan-600 text-white text-sm font-semibold py-2.5 hover:bg-cyan-500 transition">
+                                            Settings
+                                        </a>
+                                    @endif
+                                    <form method="POST" action="{{ route('logout') }}" class="w-full">
+                                        @csrf
+                                        <button type="submit"
+                                            class="w-full inline-flex items-center justify-center gap-2 rounded-md bg-rose-600 text-white text-xs font-semibold py-2 hover:bg-rose-500 transition">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                            </svg>
+                                            Logout
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                            <p class="text-xl font-semibold">{{ Auth::user()->name }}</p>
-                            <p class="text-sm text-white/80 mt-1">{{ $userRoleLabel }}</p>
-                            <p class="text-xs text-white/80">{{ Auth::user()->email }}</p>
                         </div>
-                        <div class="bg-gray-50 px-6 py-4 grid grid-cols-2 gap-3">
-                            @if (Route::has('profile.show'))
-                                <a href="{{ route('profile.show') }}"
-                                    class="inline-flex items-center justify-center gap-2 rounded-md bg-cyan-600 text-white text-xs font-semibold py-2 hover:bg-cyan-500 transition">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M5.121 17.804A4 4 0 017 17h10a4 4 0 011.879.804L21 19H3l2.121-1.196zM15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    Profile
-                                </a>
-                            @endif
-                            <form method="POST" action="{{ route('logout') }}" class="w-full">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full inline-flex items-center justify-center gap-2 rounded-md bg-rose-600 text-white text-xs font-semibold py-2 hover:bg-rose-500 transition">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                    </svg>
-                                    Logout
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                    @endauth
                 </div>
-            @endauth
-        </div>
-    </div>
-</header>
-
+            </div>
+        </header>
         @auth
             @if (Auth::user()->isAdmin())
                 {{-- Admin dashboard content is inside admin/dashboard.blade.php --}}
@@ -692,8 +771,7 @@
                     fetch(`${languageEndpoint}/${lang}`, {
                         method: 'POST',
                         headers: {
-                            'X-CSRF-TOKEN': document.querySelector(
-                                'meta[name="csrf-token"]')?.content ?? '',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
                             'Accept': 'application/json',
                         },
                     }).finally(() => {
@@ -705,18 +783,15 @@
             document.addEventListener('click', (event) => {
                 const target = event.target;
 
-                if (profilePanel && !profilePanel.classList.contains('hidden') && !profilePanel.contains(
-                        target) && !profileToggle?.contains(target)) {
+                if (profilePanel && !profilePanel.classList.contains('hidden') && !profilePanel.contains(target) && !profileToggle?.contains(target)) {
                     closeProfileMenu();
                 }
 
-                if (notificationPanel && !notificationPanel.classList.contains('hidden') && !
-                    notificationPanel.contains(target) && !notificationToggle?.contains(target)) {
+                if (notificationPanel && !notificationPanel.classList.contains('hidden') && !notificationPanel.contains(target) && !notificationToggle?.contains(target)) {
                     closeNotificationMenu();
                 }
 
-                if (languagePanel && !languagePanel.classList.contains('hidden') && !languagePanel.contains(
-                        target) && !languageToggle?.contains(target)) {
+                if (languagePanel && !languagePanel.classList.contains('hidden') && !languagePanel.contains(target) && !languageToggle?.contains(target)) {
                     closeLanguageMenu();
                 }
             });
@@ -729,5 +804,4 @@
         });
     </script>
 </body>
-
 </html>
