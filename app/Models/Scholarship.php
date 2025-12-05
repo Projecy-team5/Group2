@@ -31,7 +31,8 @@ class Scholarship extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'application_requirements' => 'array', // This is the line you need to add
+        'application_requirements' => 'array',
+        'application_deadline' => 'date',
     ];
 
     public function images()

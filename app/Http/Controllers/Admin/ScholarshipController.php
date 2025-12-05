@@ -152,29 +152,57 @@ class ScholarshipController extends Controller
     // Update text fields
     $scholarship->update($validated);
 
-    // Remove selected images
+    // Remove selected images first
+    $removedCount = 0;
     if ($request->filled('remove_gallery_images')) {
-        ScholarshipImage::whereIn('id', $request->remove_gallery_images)
+        Log::info('Images to remove', ['ids' => $request->remove_gallery_images]);
+
+        $removedCount = ScholarshipImage::whereIn('id', $request->remove_gallery_images)
             ->where('scholarship_id', $scholarship->id)
             ->delete();
+
+        Log::info('Images removed', ['count' => $removedCount]);
+    } else {
+        Log::info('No images marked for removal');
     }
 
     // Add new images (max 10 total)
     if ($request->hasFile('gallery_images')) {
-        $current = $scholarship->images()->count();
-        $removed = $request->filled('remove_gallery_images') ? count($request->remove_gallery_images) : 0;
-        $allowed = 10 - ($current - $removed);
+        // Refresh the count after deletion
+        $currentCount = $scholarship->images()->count();
+        $newFilesCount = count($request->file('gallery_images'));
+        $totalAfterUpload = $currentCount + $newFilesCount;
 
-        if (count($request->file('gallery_images')) > $allowed) {
-            return back()->withErrors(['gallery_images' => "You can only have max 10 images. Remove some first."]);
+        Log::info('Image upload attempt', [
+            'current_count' => $currentCount,
+            'new_files_count' => $newFilesCount,
+            'total_after_upload' => $totalAfterUpload
+        ]);
+
+        if ($totalAfterUpload > 10) {
+            $allowed = 10 - $currentCount;
+            return back()
+                ->withInput()
+                ->withErrors(['gallery_images' => "You can only upload {$allowed} more image(s). Maximum 10 images total."]);
         }
 
         foreach ($request->file('gallery_images') as $image) {
-            $path = $image->store('scholarship_gallery', 'public');
-            ScholarshipImage::create([
-                'scholarship_id' => $scholarship->id,
-                'image_path'     => $path,
-            ]);
+            try {
+                Log::info('Uploading image: ' . $image->getClientOriginalName());
+                $path = $image->store('scholarship_gallery', 'public');
+
+                ScholarshipImage::create([
+                    'scholarship_id' => $scholarship->id,
+                    'image_path'     => $path,
+                ]);
+
+                Log::info('Image uploaded successfully: ' . $path);
+            } catch (\Exception $e) {
+                Log::error('Failed to upload image: ' . $e->getMessage());
+                return back()
+                    ->withInput()
+                    ->withErrors(['gallery_images' => 'Failed to upload image: ' . $image->getClientOriginalName()]);
+            }
         }
     }
     return redirect()
