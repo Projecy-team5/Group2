@@ -8,3 +8,85 @@
 spline-viewer > #container > a#logo {
     display: none !important;
 }
+
+@media (min-width: 1024px) {
+    .dashboard-sidebar {
+        width: 16rem;
+    }
+
+    .dashboard-sidebar.sidebar-desktop-collapsed {
+        width: 5rem;
+    }
+
+    .dashboard-sidebar.sidebar-desktop-collapsed:hover {
+        width: 16rem;
+    }
+
+    .dashboard-sidebar .sidebar-hover-show {
+        display: block !important;
+    }
+
+    .dashboard-sidebar.sidebar-desktop-collapsed .sidebar-hover-show {
+        display: none !important;
+    }
+
+    .dashboard-sidebar.sidebar-desktop-collapsed:hover .sidebar-hover-show {
+        display: block !important;
+    }
+
+    .dashboard-sidebar .sidebar-label {
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+        overflow: hidden;
+        transition: max-width 0.3s ease, opacity 0.3s ease;
+        max-width: 14rem;
+        opacity: 1;
+    }
+
+    .dashboard-sidebar.sidebar-desktop-collapsed .sidebar-label {
+        max-width: 0;
+        opacity: 0;
+    }
+
+    .dashboard-sidebar.sidebar-desktop-collapsed:hover .sidebar-label {
+        max-width: 14rem;
+        opacity: 1;
+    }
+
+    .dashboard-sidebar .dashboard-nav {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .dashboard-sidebar.sidebar-desktop-collapsed .dashboard-nav {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .dashboard-sidebar.sidebar-desktop-collapsed:hover .dashboard-nav {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .dashboard-sidebar .sidebar-link {
+        justify-content: flex-start;
+        gap: 0.75rem;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    .dashboard-sidebar.sidebar-desktop-collapsed .sidebar-link {
+        justify-content: center;
+        gap: 0;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .dashboard-sidebar.sidebar-desktop-collapsed:hover .sidebar-link {
+        justify-content: flex-start;
+        gap: 0.75rem;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}

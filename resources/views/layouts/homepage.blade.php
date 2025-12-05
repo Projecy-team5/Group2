@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    @php
+        $sharedSettings = $businessSettings ?? null;
+        $brandName = $sharedSettings?->name ?? config('app.name', 'ScholarshipHub');
+        $brandLogo = $sharedSettings?->logo_url;
+        $faviconUrl = $sharedSettings?->favicon_url ?? asset('favicon.ico');
+        $defaultFooterCopy = 'Your platform for discovering educational funding opportunities. We help students find and apply for scholarships.';
+        $footerCopy = $sharedSettings?->footer_text ?? $defaultFooterCopy;
+    @endphp
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'ScholarshipHub') }}</title>
+    <title>{{ $brandName }}</title>
+    <link rel="icon" type="image/png" href="{{ $faviconUrl }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
@@ -41,18 +50,22 @@
         .nav-link {
             position: relative;
             transition: color 0.3s ease;
+            padding-bottom: 4px;
         }
         .nav-link::after {
             content: '';
             position: absolute;
             width: 0;
-            height: 2px;
-            bottom: -2px;
+            height: 3px;
+            bottom: -20px;
             left: 0;
-            background: linear-gradient(135deg, #5a67d8, #9f7aea);
+            background: #3b82f6;
             transition: width 0.3s ease;
         }
         .nav-link:hover::after {
+            width: 100%;
+        }
+        .nav-link.active::after {
             width: 100%;
         }
         .dropdown {
@@ -88,14 +101,68 @@
             <div class="flex justify-between items-center h-16">
                 {{-- Left --}}
                 <div class="flex items-center">
-                    <a href="{{ url(path: '/') }}" class="text-2xl sm:text-3xl font-extrabold text-gradient">ScholarshipHub</a>
+                    <a href="{{ url(path: '/') }}" class="flex items-center gap-3">
+                        @if ($brandLogo)
+                            <img src="{{ $brandLogo }}" alt="{{ $brandName }} logo" class="h-10 w-auto object-contain">
+                            <span class="text-2xl sm:text-3xl font-extrabold text-gradient hidden sm:inline">{{ $brandName }}</span>
+                        @else
+                            <span class="text-2xl sm:text-3xl font-extrabold text-gradient">{{ $brandName }}</span>
+                        @endif
+                    </a>
                     <div class="hidden md:block ml-12">
                         <div class="flex space-x-8">
-                            <a href="{{ url(path: '/') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Home</a>
-                            <a href="{{ url('/scholarships') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Scholarships</a>
-                            <a href="{{ url('/about') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">About</a>
-                            <a href="{{ url('/articles') }}" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Resources</a>
-                            <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium text-sm">Contact</a>
+                            <a href="{{ url(path: '/') }}" class="nav-link {{ request()->is('/') ? 'active text-indigo-600' : 'text-gray-700' }} hover:text-indigo-600 font-medium text-sm">Home</a>
+
+                            {{-- Scholarships Dropdown --}}
+                            <div x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" class="relative">
+                                <a href="{{ url('/scholarships') }}" class="nav-link {{ request()->is('scholarships*') ? 'active text-indigo-600' : 'text-gray-700' }} hover:text-indigo-600 font-medium text-sm flex items-center gap-1">
+                                    Scholarships
+                                    <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </a>
+                                <div x-show="open"
+                                    x-transition:enter="transition ease-out duration-200"
+                                    x-transition:enter-start="opacity-0 transform scale-95"
+                                    x-transition:enter-end="opacity-100 transform scale-100"
+                                    x-transition:leave="transition ease-in duration-150"
+                                    x-transition:leave-start="opacity-100 transform scale-100"
+                                    x-transition:leave-end="opacity-0 transform scale-95"
+                                    class="absolute left-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-gray-200 z-50"
+                                    style="display: none;">
+                                    <div class="p-4">
+                                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Featured Scholarships</div>
+                                        @php
+                                            $featuredScholarships = \App\Models\Scholarship::where('status', 'active')
+                                                ->latest()
+                                                ->take(3)
+                                                ->get();
+                                        @endphp
+                                        <div class="space-y-2">
+                                            @forelse($featuredScholarships as $scholarship)
+                                                <a href="{{ route('scholarships.show', $scholarship) }}"
+                                                    class="block p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                                    <div class="font-medium text-gray-900 text-sm">{{ Str::limit($scholarship->scholarship_name, 40) }}</div>
+                                                    <div class="text-xs text-indigo-600 font-semibold mt-1">${{ number_format($scholarship->award_amount) }}</div>
+                                                    <div class="text-xs text-gray-500 mt-1">Deadline: {{ \Carbon\Carbon::parse($scholarship->application_deadline)->format('M j, Y') }}</div>
+                                                </a>
+                                            @empty
+                                                <div class="text-sm text-gray-500 py-2">No scholarships available</div>
+                                            @endforelse
+                                        </div>
+                                        <div class="mt-4 pt-4 border-t border-gray-100">
+                                            <a href="{{ url('/scholarships') }}"
+                                                class="block text-center text-sm font-semibold text-indigo-600 hover:text-indigo-700">
+                                                View All Scholarships →
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a href="{{ url('/about') }}" class="nav-link {{ request()->is('about') ? 'active text-indigo-600' : 'text-gray-700' }} hover:text-indigo-600 font-medium text-sm">About</a>
+                            <a href="{{ url('/articles') }}" class="nav-link {{ request()->is('articles*') || request()->is('category*') ? 'active text-indigo-600' : 'text-gray-700' }} hover:text-indigo-600 font-medium text-sm">Resources</a>
+                            <a href="{{ url('/contact') }}" class="nav-link {{ request()->is('contact') ? 'active text-indigo-600' : 'text-gray-700' }} hover:text-indigo-600 font-medium text-sm">Contact</a>
                         </div>
                     </div>
                 </div>
@@ -153,10 +220,10 @@
             <div id="mobile-menu" class="hidden md:hidden bg-white/90 backdrop-blur border-t border-gray-200">
                 <div class="px-4 py-4 space-y-2">
                     <a href="{{ url('/') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Home</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Scholarships</a>
+                    <a href="{{ url('/scholarships') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Scholarships</a>
                     <a href="{{ url('/about') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">About</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Resources</a>
-                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Contact</a>
+                    <a href="{{ url('/articles') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Resources</a>
+                    <a href="{{ url('/contact') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600">Contact</a>
                 </div>
             </div>
         </div>
@@ -168,54 +235,64 @@
     </main>
 
     {{-- FOOTER --}}
-    <footer class="bg-gray-900 text-white py-12 mt-16 animate-slide-up">
-        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-                <h3 class="text-2xl font-extrabold text-gradient mb-4">ScholarshipHub</h3>
-                <p class="text-gray-300 text-sm leading-relaxed">Empowering students to achieve their educational dreams through accessible funding opportunities.</p>
-                <div class="flex space-x-4 mt-6">
-                    <a href="#" class="text-gray-400 hover:text-white transform hover:scale-110 transition-all duration-300">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.77 7.46H14.5v-1.9c0-.9.6-1.1 1-1.1h3V.5h-4.33C10.24.5 9.5 3.44 9.5 5.32v2.14h-3v4h3v12h5v-12h3.85l.42-4z"/></svg>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-white transform hover:scale-110 transition-all duration-300">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-white transform hover:scale-110 transition-all duration-300">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-9.96 4.46-9.96 9.96 0 5.06 3.686 9.24 8.51 9.9v-6.99h-2.55v-2.91h2.55v-2.22c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.9h2.78l-.45 2.91h-2.33v6.99c4.824-.66 8.51-4.84 8.51-9.9 0-5.5-4.46-9.96-9.96-9.96z"/></svg>
-                    </a>
+    <footer class="bg-gray-900 text-white py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                {{-- About --}}
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold mb-4">{{ $brandName }}</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                        {{ $footerCopy }}
+                    </p>
+                    @if ($sharedSettings?->address)
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            {{ $sharedSettings->address }}
+                        </p>
+                    @endif
+                </div>
+
+                {{-- Quick Links --}}
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{{ url('/') }}" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="{{ url('/scholarships') }}" class="text-gray-400 hover:text-white transition-colors">Scholarships</a></li>
+                        <li><a href="{{ url('/articles') }}" class="text-gray-400 hover:text-white transition-colors">Resources</a></li>
+                        <li><a href="{{ url('/about') }}" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                    </ul>
+                </div>
+
+                {{-- Contact --}}
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contact</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="{{ url('/contact') }}" class="hover:text-white transition-colors">Contact Us</a></li>
+                        @if ($sharedSettings?->email)
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                                {{ $sharedSettings->email }}
+                            </li>
+                        @endif
+                        @if ($sharedSettings?->phone)
+                            <li class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 5a2 2 0 012-2h1.27a2 2 0 011.94 1.52l.65 2.6a2 2 0 01-.58 1.94l-1.1 1.1a16 16 0 006.35 6.35l1.1-1.1a2 2 0 011.94-.58l2.6.65A2 2 0 0121 19.73V21a2 2 0 01-2 2 18 18 0 01-16-16 2 2 0 012-2z"></path>
+                                </svg>
+                                {{ $sharedSettings->phone }}
+                            </li>
+                        @endif
+                    </ul>
                 </div>
             </div>
-            <div>
-                <h4 class="font-semibold text-lg text-white mb-4">Platform</h4>
-                <ul class="space-y-3 text-gray-300 text-sm">
-                    <li><a href="#" class="hover:text-white transition-colors duration-300 relative group">Find Scholarships<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span></a></li>
-                    <li><a href="#" class="hover:text-white transition-colors duration-300 relative group">Application Tracker<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span></a></li>
-                    <li><a href="#" class="hover:text-white transition-colors duration-300 relative group">Essay Assistant<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span></a></li>
-                    <li><a href="#" class="hover:text-white transition-colors duration-300 relative group">Deadlines<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span></a></li>
-                </ul>
+
+            {{-- Bottom Bar --}}
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400 text-sm">&copy; {{ date('Y') }} {{ $brandName }}. All rights reserved.</p>
             </div>
-            <div>
-                <h4 class="font-semibold text-lg text-white mb-4">Resources</h4>
-                <ul class="space-y-3 text-gray-300 text-sm">
-                    <li><a href="#" class="hover:text-white transition-colors duration-300 relative group">Blog<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span></a></li>
-                    <li><a href="#" class="hover:text-white transition-colors duration-300 relative group">Guides<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span></a></li>
-                    <li><a href="#" class="hover:text-white transition-colors duration-300 relative group">FAQs<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span></a></li>
-                    <li><a href="#" class="hover:text-white transition-colors duration-300 relative group">Success Stories<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span></a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-semibold text-lg text-white mb-4">Support</h4>
-                <ul class="space-y-3 text-gray-300 text-sm">
-                    <li><a href="#" class="hover:text-white transition-colors duration-3
-00 relative group">Contact Us<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span></a></li>
-                    <li><a href="#" class="hover:text-white transition-colors duration-300 relative group">Help Center<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span></a></li>
-                    <li><a href="#" class="hover:text-white transition-colors duration-300 relative group">Privacy Policy<span class="absolute bottom-0 left-0 w-0 h-0. od-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300"></span></a></li>
-                    <li><a href="#" class="hover:text-white transition-colors duration-300 relative group">Terms of Service<span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:w-full"></span></a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-300 text-sm">
-            <p>&copy; {{ date('Y') }} ScholarshipHub. All rights reserved.</p>
         </div>
     </footer>
 
@@ -423,5 +500,6 @@
         });
     </script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @stack('scripts')
 </body>
 </html>

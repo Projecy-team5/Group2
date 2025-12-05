@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,25 +13,56 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::query();
+        $query = User::query()->with('role');
 
-        // Filter by name
-        if ($request->filled('name')) {
-            $query->where('name', 'LIKE', '%' . $request->name . '%');
+        if ($request->filled('search')) {
+            $search = trim($request->input('search'));
+            $query->where(function ($builder) use ($search) {
+                $builder
+                    ->where('name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('email', 'LIKE', '%' . $search . '%')
+                    ->orWhereHas('role', function ($roleQuery) use ($search) {
+                        $roleQuery->where('name', 'LIKE', '%' . $search . '%');
+                    });
+            });
         }
 
-        // Filter by created date
         if ($request->filled('created_at')) {
             $query->whereDate('created_at', $request->created_at);
         }
 
-        $users = $query->paginate(10)->withQueryString();
-        return view('admin.users.index', compact('users'));
+        $allowedSorts = ['name', 'email', 'created_at'];
+        $sortField = $request->input('sort', 'name');
+        if (! in_array($sortField, $allowedSorts, true)) {
+            $sortField = 'name';
+        }
+
+        $sortDirection = $request->input('direction') === 'asc' ? 'asc' : 'desc';
+
+        $perPageOptions = [5, 10, 25, 50];
+        $perPage = (int) $request->input('per_page', 10);
+        if (! in_array($perPage, $perPageOptions, true)) {
+            $perPage = 10;
+        }
+
+        $users = $query->orderBy($sortField, $sortDirection)
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return view('admin.users.index', [
+            'users' => $users,
+            'perPage' => $perPage,
+            'sortField' => $sortField,
+            'sortDirection' => $sortDirection,
+            'perPageOptions' => $perPageOptions,
+            'allowedSorts' => $allowedSorts,
+        ]);
     }
 
     public function create()
     {
-        return view('admin.users.create');
+        $roles = Role::orderBy('name')->get();
+        return view('admin.users.create', compact('roles'));
     }
 
     public function store(Request $request)
@@ -40,14 +72,14 @@ class UserController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => ['required', 'confirmed', 'string', 'min:8'],
-                'is_admin' => ['required', 'boolean'],
+                'role_id' => ['required', 'exists:roles,id'],
             ]);
 
             $user = User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'is_admin' => $validated['is_admin'],
+                'role_id' => $validated['role_id'],
                 'email_verified_at' => now(), // Auto-verify email for admin-created users
             ]);
 
@@ -62,12 +94,14 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        $user->load('role');
         return view('admin.users.show', compact('user'));
     }
 
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $roles = Role::orderBy('name')->get();
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     public function update(Request $request, User $user)
@@ -77,14 +111,14 @@ class UserController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
                 'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
-                'is_admin' => ['required', 'boolean'],
+                'role_id' => ['required', 'exists:roles,id'],
             ]);
 
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $request->password ? Hash::make($request->password) : $user->password,
-                'is_admin' => $request->is_admin,
+                'role_id' => $request->role_id,
             ]);
 
             return redirect()->route('admin.users.index')->with('success', 'User updated successfully!');

@@ -8,7 +8,7 @@ abstract class Controller
 {
     protected function isAdmin()
     {
-        return Auth::check() && Auth::user()->is_admin;
+        return Auth::check() && Auth::user()->isAdmin();
     }
 
     protected function userDashboardData()

@@ -1,29 +1,55 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Support\Str;
 
 class Article extends Model
 {
-    use HasFactory, Sluggable;
+    use HasFactory;
 
     protected $fillable = [
-        'title', 'slug', 'excerpt', 'content', 'published', 'published_at'
+        'title', 'slug', 'excerpt', 'content', 'published', 'published_at',
     ];
 
-    protected $dates = ['published_at'];
+    protected $casts = [
+        'published' => 'boolean',
+        'published_at' => 'datetime',
+    ];
 
-    public function sluggable(): array
+    protected static function boot()
     {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
+        parent::boot();
+
+        static::creating(function (Article $article) {
+            $article->slug = static::generateUniqueSlug($article->title);
+        });
+
+        static::updating(function (Article $article) {
+            if ($article->isDirty('title')) {
+                $article->slug = static::generateUniqueSlug($article->title, $article->id);
+            }
+        });
+    }
+
+    protected static function generateUniqueSlug(string $title, ?int $ignoreId = null): string
+    {
+        $slug = Str::slug($title) ?: Str::slug(Str::uuid());
+        $original = $slug;
+        $counter = 1;
+
+        while (
+            static::where('slug', $slug)
+                ->when($ignoreId, fn($query) => $query->where('id', '!=', $ignoreId))
+                ->exists()
+        ) {
+            $slug = "{$original}-{$counter}";
+            $counter++;
+        }
+
+        return $slug;
     }
 
     public function categories()
@@ -37,8 +63,9 @@ class Article extends Model
                      ->whereNotNull('published_at')
                      ->where('published_at', '<=', now());
     }
+
     public function getRouteKeyName()
-{
-    return 'slug';
-}
+    {
+        return 'slug';
+    }
 }

@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Role extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+        'is_admin',
+    ];
+
+    protected $casts = [
+        'is_admin' => 'boolean',
+    ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+}

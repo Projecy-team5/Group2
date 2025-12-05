@@ -12,7 +12,10 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::latest()->paginate(20);
+        $categories = Category::withCount('articles')
+            ->latest()
+            ->paginate(20);
+
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -37,8 +40,20 @@ class CategoryController extends Controller
         return redirect()->route('admin.categories.index')->with('success', 'Category created!');
     }
 
+    public function show(Category $category)
+    {
+        $category->loadCount('articles')
+                 ->load(['articles' => function ($query) {
+                     $query->latest()->take(5);
+                 }]);
+
+        return view('admin.categories.show', compact('category'));
+    }
+
     public function edit(Category $category)
     {
+        $category->loadCount('articles');
+
         return view('admin.categories.edit', compact('category'));
     }
 

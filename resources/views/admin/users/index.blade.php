@@ -22,9 +22,9 @@
             <div class="bg-gray-50 rounded-lg p-4 border border-[#b8bbc0]">
                 <form method="GET" action="{{ route('admin.users.index') }}" class="flex flex-wrap gap-4 items-end">
                     <div class="flex-1 min-w-[200px]">
-                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Search by Name</label>
+                        <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Search by Name</label>
                         <div class="relative">
-                            <input type="text" name="name" id="name" value="{{ request('name') }}"
+                            <input type="text" name="search" id="search" value="{{ request('search') }}"
                                 placeholder="Enter user name..."
                                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 absolute left-3 top-3 text-gray-400"
@@ -78,6 +78,9 @@
                                 Email</th>
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
+                                Role</th>
+                            <th
+                                class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
                                 Created</th>
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 w-[100px]">
@@ -124,6 +127,16 @@
                                         </svg>
                                         <span class="text-gray-700">{{ $user->email }}</span>
                                     </div>
+                                </td>
+                                <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                    @if ($user->role)
+                                        <span
+                                            class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium {{ $user->role->is_admin ? 'text-blue-700 border-blue-200 bg-blue-50' : 'text-gray-700 border-gray-200 bg-gray-50' }}">
+                                            {{ $user->role->name }}
+                                        </span>
+                                    @else
+                                        <span class="text-xs text-gray-500">—</span>
+                                    @endif
                                 </td>
                                 {{-- <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
                             @if ($user->status === 'active')
