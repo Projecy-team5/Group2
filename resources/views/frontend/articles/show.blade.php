@@ -4,8 +4,6 @@
 @section('description', $article->excerpt ?? 'Scholarship guide')
 
 @section('content')
-
-<!-- Article Header -->
 <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16">
     <div class="max-w-4xl mx-auto px-6">
         <div class="flex flex-wrap gap-2 mb-4">
@@ -24,11 +22,7 @@
         </div>
     </div>
 </div>
-
-<!-- Article Content -->
 <div class="max-w-4xl mx-auto px-6 py-12">
-
-    <!-- Excerpt -->
     @if($article->excerpt)
         <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r mb-8">
             <p class="text-lg text-gray-700 italic">
@@ -36,14 +30,10 @@
             </p>
         </div>
     @endif
-
-    <!-- Main Content -->
     <article class="prose prose-lg max-w-none text-gray-700 leading-relaxed mb-12">
         {!! nl2br(e($article->content)) !!}
     </article>
-
-    <!-- Tags Section -->
-    <div class="mb-12 pb-8 border-b border-gray-200">
+    {{-- <div class="mb-12 pb-8 border-b border-gray-200">
         <p class="text-sm font-semibold text-gray-600 mb-3">Tags:</p>
         <div class="flex flex-wrap gap-2">
             @foreach($article->categories as $cat)
@@ -53,9 +43,7 @@
                 </a>
             @endforeach
         </div>
-    </div>
-
-    <!-- Related Articles -->
+    </div> --}}
     @if($related->count())
         <section class="mb-12">
             <h2 class="text-2xl font-bold mb-6">Related Guides</h2>
@@ -75,14 +63,11 @@
             </div>
         </section>
     @endif
-
-    <!-- Back Button -->
     <div class="text-center">
         <a href="{{ route('articles.index') }}"
            class="inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition">
             ← Back to All Guides
         </a>
     </div>
-
 </div>
 @endsection

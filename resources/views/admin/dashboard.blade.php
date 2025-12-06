@@ -51,10 +51,18 @@
                 <canvas id="adminStatusChart" height="260"></canvas>
             </div>
             <dl class="mt-6 grid gap-2 text-sm">
-                @forelse ($statusCounts as $status => $count)
+                @forelse ($statusCounts as $index => $status)
+                    @php
+                        $colors = ['#0ea5e9', '#22c55e', '#f59e0b', '#a855f7', '#f43f5e', '#6b7280'];
+                        $statusIndex = array_search($index, array_keys($statusCounts));
+                        $color = $colors[$statusIndex % count($colors)];
+                    @endphp
                     <div class="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3">
-                        <dt class="font-medium text-gray-700">{{ \Illuminate\Support\Str::headline($status) }}</dt>
-                        <dd class="text-gray-900 font-semibold">{{ $count }}</dd>
+                        <dt class="flex items-center gap-3 font-medium text-gray-700">
+                            <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: {{ $color }}"></span>
+                            {{ \Illuminate\Support\Str::headline($index) }}
+                        </dt>
+                        <dd class="text-gray-900 font-semibold">{{ $status }}</dd>
                     </div>
                 @empty
                     <p class="text-sm text-gray-500">No applications yet. Insights will appear once submissions arrive.</p>
@@ -155,10 +163,18 @@
             const total = dataset.data.reduce((sum, value) => sum + value, 0);
 
             if (!total) {
+                // Empty state
                 ctx.fillStyle = '#e5e7eb';
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
                 ctx.fill();
+
+                // Empty state text
+                ctx.fillStyle = '#9ca3af';
+                ctx.font = '14px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('No data', centerX, centerY);
             } else {
                 let startAngle = -Math.PI / 2;
                 dataset.data.forEach((value, index) => {
@@ -169,10 +185,38 @@
                     ctx.closePath();
                     ctx.fillStyle = dashboardChartColors[index % dashboardChartColors.length];
                     ctx.fill();
+
+                    // Add percentage labels on larger slices
+                    if (sliceAngle > 0.2) { // Only show if slice is > ~11%
+                        const percentage = ((value / total) * 100).toFixed(0);
+                        const labelAngle = startAngle + sliceAngle / 2;
+                        const labelRadius = radius * 0.75;
+                        const labelX = centerX + Math.cos(labelAngle) * labelRadius;
+                        const labelY = centerY + Math.sin(labelAngle) * labelRadius;
+
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = 'bold 14px sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(percentage + '%', labelX, labelY);
+                    }
+
                     startAngle += sliceAngle;
                 });
+
+                // Draw total in center
+                ctx.fillStyle = '#1f2937';
+                ctx.font = 'bold 24px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(total, centerX, centerY - 8);
+
+                ctx.fillStyle = '#6b7280';
+                ctx.font = '12px sans-serif';
+                ctx.fillText('Total', centerX, centerY + 12);
             }
 
+            // Cut out center for doughnut effect
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius * 0.55, 0, Math.PI * 2);
@@ -183,8 +227,9 @@
         const drawLineChart = (canvas, dataset) => {
             const { ctx, width, height } = setupCanvas(canvas);
             const padding = 24;
+            const bottomPadding = 50; // Extra space for labels
             const chartWidth = width - padding * 2;
-            const chartHeight = height - padding * 2;
+            const chartHeight = height - padding - bottomPadding;
 
             const maxValue = Math.max(...dataset.data, 1);
             const points = dataset.data.length
@@ -192,21 +237,23 @@
                       const step = dataset.data.length > 1 ? index / (dataset.data.length - 1) : 0;
                       const x = padding + step * chartWidth;
                       const y = padding + (1 - value / maxValue) * chartHeight;
-                      return { x, y };
+                      return { x, y, value };
                   })
                 : [
-                      { x: padding, y: padding + chartHeight },
-                      { x: padding + chartWidth, y: padding + chartHeight },
+                      { x: padding, y: padding + chartHeight, value: 0 },
+                      { x: padding + chartWidth, y: padding + chartHeight, value: 0 },
                   ];
 
+            // Draw filled area under line
             ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
             ctx.beginPath();
-            ctx.moveTo(points[0].x, height - padding);
+            ctx.moveTo(points[0].x, height - bottomPadding);
             points.forEach((point) => ctx.lineTo(point.x, point.y));
-            ctx.lineTo(points[points.length - 1].x, height - padding);
+            ctx.lineTo(points[points.length - 1].x, height - bottomPadding);
             ctx.closePath();
             ctx.fill();
 
+            // Draw line
             ctx.strokeStyle = '#3b82f6';
             ctx.lineWidth = 2;
             ctx.beginPath();
@@ -219,11 +266,38 @@
             });
             ctx.stroke();
 
+            // Draw points
             ctx.fillStyle = '#1d4ed8';
             points.forEach((point) => {
                 ctx.beginPath();
-                ctx.arc(point.x, point.y, 3, 0, Math.PI * 2);
+                ctx.arc(point.x, point.y, 4, 0, Math.PI * 2);
                 ctx.fill();
+            });
+
+            // Draw month labels on x-axis
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '11px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+            if (dataset.labels && dataset.labels.length) {
+                dataset.labels.forEach((label, index) => {
+                    const step = dataset.labels.length > 1 ? index / (dataset.labels.length - 1) : 0;
+                    const x = padding + step * chartWidth;
+                    const y = height - bottomPadding + 8;
+                    ctx.fillText(label, x, y);
+                });
+            }
+
+            // Draw values above points
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 12px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            points.forEach((point) => {
+                if (point.value > 0) {
+                    ctx.fillText(point.value, point.x, point.y - 8);
+                }
             });
         };
 
