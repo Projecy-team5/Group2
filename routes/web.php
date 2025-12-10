@@ -21,10 +21,20 @@ Route::get('/', function () {
 })->name('home');
 
 Route::post('/locale/{locale}', function (string $locale) {
+    // Validate locale
+    $allowedLocales = ['en', 'km', 'zh'];
+    if (!in_array($locale, $allowedLocales)) {
+        return response()->json(['status' => 'error', 'message' => 'Invalid locale'], 400);
+    }
+
     session(['app_locale' => $locale]);
     app()->setLocale($locale);
 
-    return response()->json(['status' => 'ok']);
+    return response()->json([
+        'status' => 'ok',
+        'locale' => $locale,
+        'session_locale' => session('app_locale')
+    ]);
 })->name('locale.switch');
 
 Route::get('/about', function () {
@@ -128,6 +138,11 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
+    // Admin Profile
+    Route::get('/profile', function () {
+        return view('admin.profile.show');
+    })->name('profile.show');
+
     // Contact Messages
     Route::get('/contacts', [App\Http\Controllers\Admin\ContactMessageController::class, 'index'])->name('contacts.index');
     Route::get('/contacts/{contact}', [App\Http\Controllers\Admin\ContactMessageController::class, 'show'])->name('contacts.show');
@@ -148,6 +163,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Applications
     Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
+    Route::post('/applications/{application}/approve', [ApplicationController::class, 'approve'])->name('applications.approve');
+    Route::post('/applications/{application}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');
 
     // Business Settings
     Route::get('/business-settings', [BusinessSettingController::class, 'edit'])->name('business-settings.edit');
