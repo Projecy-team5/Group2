@@ -15,22 +15,29 @@
             ? \App\Models\Contact::where('is_read', false)->latest()->take(5)->get()
             : collect();
         $availableLanguages = collect([
-            ['code' => 'en', 'label' => 'English', 'flag' => 'gb'],
-            ['code' => 'kh', 'label' => 'Khmer', 'flag' => 'kh'],
+            ['code' => 'en', 'label' => 'English', 'flag' => 'us'],
+            ['code' => 'km', 'label' => 'Khmer', 'flag' => 'kh'],
+            ['code' => 'zh', 'label' => 'Chinese', 'flag' => 'cn'],
         ]);
         $currentLanguage = session('app_locale', 'en');
         $flagIcons = [
             'gb' =>
-                '<svg viewBox="0 0 32 20" width="28" height="18" class="rounded shadow"><rect width="32" height="20" fill="#012169"/><path d="M0 0 L32 20 M32 0 L0 20" stroke="#fff" stroke-width="4"/><path d="M0 0 L32 20 M32 0 L0 20" stroke="#C8102E" stroke-width="2"/><rect x="14" width="4" height="20" fill="#fff"/><rect y="8" width="32" height="4" fill="#fff"/><rect x="15" width="2" height="20" fill="#C8102E"/><rect y="9" width="32" height="2" fill="#C8102E"/></svg>',
+                '<span class="flag-icon flag-icon-gb" style="width: 28px; height: 18px; display: inline-block; border-radius: 0.25rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);"></span>',
+            'us' =>
+                '<span class="flag-icon flag-icon-us" style="width: 28px; height: 18px; display: inline-block; border-radius: 0.25rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);"></span>',
             'kh' =>
-                '<svg viewBox="0 0 32 20" width="28" height="18" class="rounded shadow"><rect width="32" height="20" fill="#032ea1"/><rect y="4" width="32" height="12" fill="#e00034"/><path d="M16 6l6 6h-3v2h-6v-2h-3z" fill="#fff"/></svg>',
+                '<span class="flag-icon flag-icon-kh" style="width: 28px; height: 18px; display: inline-block; border-radius: 0.25rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);"></span>',
+            'cn' =>
+                '<span class="flag-icon flag-icon-cn" style="width: 28px; height: 18px; display: inline-block; border-radius: 0.25rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);"></span>',
         ];
-        $renderFlag = fn(string $code) => $flagIcons[$code] ?? $flagIcons['gb'];
+        $renderFlag = fn(string $code) => $flagIcons[$code] ?? $flagIcons['us'];
     @endphp
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $brandName }} Admin</title>
     <link rel="icon" type="image/png" href="{{ $faviconUrl }}">
+    <link rel="stylesheet" href="{{ asset('flag-icon-css/css/flag-icon.min.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -207,22 +214,27 @@
     </aside>
 
     <main id="dashboardMain" class="min-h-screen transition-[margin-left] duration-300 ease-in-out lg:ml-0">
-        
+
 <header class="bg-white border-b border-gray-200 px-6 py-4">
     <div class="flex items-center justify-between gap-4">
-        <button type="button"
-            class="p-2 text-gray-600 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary"
-            data-sidebar-toggle aria-label="Toggle sidebar" aria-expanded="false">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-        </button>
+        <div class="flex items-center gap-3">
+            <button type="button"
+                class="p-2 text-gray-600 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary"
+                data-sidebar-toggle aria-label="Toggle sidebar" aria-expanded="false">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+            <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-md font-mono">
+                Locale: {{ app()->getLocale() }}
+            </span>
+        </div>
         <div class="flex items-center gap-4">
             <div class="relative">
                 <button type="button" id="languageToggle" aria-haspopup="true" aria-expanded="false"
                     data-locale-endpoint="{{ url('/locale') }}"
-                    class="inline-flex items-center justify-center w-11 h-11 rounded-full border border-gray-200 bg-white shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary transition">
+                    class="inline-flex items-center justify-center w-11 h-11 rounded-full border border-gray-200 bg-white shadow-sm hover:bg-blue-50 hover:border-blue-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-200">
                     @php
                         $currentFlag = $availableLanguages->firstWhere('code', $currentLanguage);
                         $flagCode = $currentFlag['flag'] ?? 'gb';
@@ -234,7 +246,7 @@
                     class="hidden absolute right-0 mt-4 w-44 z-40 rounded-2xl border border-gray-100 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.15)] overflow-hidden">
                     @foreach ($availableLanguages as $language)
                         <button type="button"
-                            class="language-option w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold transition {{ $currentLanguage === $language['code'] ? 'bg-primary text-white' : 'text-gray-700 hover:bg-primary/5' }}"
+                            class="language-option w-full flex items-center gap-3 px-4 py-2.5 text-sm font-semibold transition-all duration-200 {{ $currentLanguage === $language['code'] ? 'bg-primary text-white' : 'text-gray-700 hover:bg-blue-50 hover:text-primary' }}"
                             data-lang="{{ $language['code'] }}">
                             <span class="flex items-center justify-center w-7 h-5">
                                 {!! $renderFlag($language['flag']) !!}
@@ -359,7 +371,16 @@
                             <p class="text-xs text-white/80">{{ Auth::user()->email }}</p>
                         </div>
                         <div class="bg-gray-50 px-6 py-4 grid grid-cols-2 gap-3">
-                            @if (Route::has('profile.show'))
+                            @if ($isAdminUser && Route::has('admin.profile.show'))
+                                <a href="{{ route('admin.profile.show') }}"
+                                    class="inline-flex items-center justify-center gap-2 rounded-md bg-cyan-600 text-white text-xs font-semibold py-2 hover:bg-cyan-500 transition">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                            d="M5.121 17.804A4 4 0 017 17h10a4 4 0 011.879.804L21 19H3l2.121-1.196zM15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    Profile
+                                </a>
+                            @elseif (Route::has('profile.show'))
                                 <a href="{{ route('profile.show') }}"
                                     class="inline-flex items-center justify-center gap-2 rounded-md bg-cyan-600 text-white text-xs font-semibold py-2 hover:bg-cyan-500 transition">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -687,8 +708,12 @@
                 option.addEventListener('click', () => {
                     const lang = option.dataset.lang;
                     if (!lang || !languageEndpoint) {
+                        console.error('Language or endpoint not found', { lang, languageEndpoint });
                         return;
                     }
+
+                    console.log('Switching to language:', lang);
+
                     fetch(`${languageEndpoint}/${lang}`, {
                         method: 'POST',
                         headers: {
@@ -696,7 +721,14 @@
                                 'meta[name="csrf-token"]')?.content ?? '',
                             'Accept': 'application/json',
                         },
-                    }).finally(() => {
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Language switched:', data);
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Error switching language:', error);
                         window.location.reload();
                     });
                 });

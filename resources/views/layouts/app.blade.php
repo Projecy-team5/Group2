@@ -1,40 +1,44 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        @php
-            $sharedSettings = $businessSettings ?? null;
-            $brandName = $sharedSettings?->name ?? config('app.name', 'ScholarshipHub');
-            $faviconUrl = $sharedSettings?->favicon_url ?? asset('favicon.ico');
-        @endphp
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ $brandName }}</title>
-        <link rel="icon" type="image/png" href="{{ $faviconUrl }}">
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @livewireStyles
-    </head>
-    <body class="font-sans antialiased">
-        <x-banner />
-        <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
-        @stack('modals')
+<head>
+    @php
+        $sharedSettings = $businessSettings ?? null;
+        $brandName = $sharedSettings?->name ?? config('app.name', 'ScholarshipHub');
+        $faviconUrl = $sharedSettings?->favicon_url ?? asset('favicon.ico');
+    @endphp
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ $brandName }}</title>
+    <link rel="icon" type="image/png" href="{{ $faviconUrl }}">
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link rel="stylesheet" href="{{ asset('flag-icon-css/css/flag-icon.min.css') }}">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
+</head>
+
+<body class="font-sans antialiased">
+    <x-banner />
+    <div class="min-h-screen bg-gray-100">
+        @livewire('navigation-menu')
+        @if (isset($header))
+            <header class="bg-white shadow">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
+                </div>
+            </header>
+        @endif
+        <main>
+            {{ $slot }}
+        </main>
+    </div>
+    @stack('modals')
 
 
-        @livewireScripts
-    </body>
+    @livewireScripts
+</body>
+
 </html>

@@ -42,4 +42,20 @@ class ApplicationController extends Controller
         $applications = Application::with(['user', 'scholarship'])->latest()->paginate(20);
         return view('admin.applications.index', compact('applications'));
     }
+
+    // Approve an application
+    public function approve(Application $application)
+    {
+        $application->update(['status' => 'approved']);
+
+        return redirect()->back()->with('success', 'Application approved successfully!');
+    }
+
+    // Reject an application
+    public function reject(Application $application)
+    {
+        $application->update(['status' => 'rejected']);
+
+        return redirect()->back()->with('success', 'Application rejected.');
+    }
 }

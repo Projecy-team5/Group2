@@ -35,9 +35,9 @@
                                 $daysLeft = \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($scholarship->application_deadline), false);
                             @endphp
                             <p class="text-sm mt-2 @if($daysLeft <= 7) text-red-600 font-medium @else text-gray-500 @endif">
-                                @if($daysLeft > 0) {{ $daysLeft }} days left
+                                {{-- @if($daysLeft > 0) {{ $daysLeft }} days left
                                 @elseif($daysLeft == 0) Closes today
-                                @else Expired @endif
+                                @else Expired @endif --}}
                             </p>
                         </div>
                     </div>

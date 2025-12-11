@@ -57,7 +57,7 @@
             position: absolute;
             width: 0;
             height: 3px;
-            bottom: -20px;
+            bottom: -8px;
             left: 0;
             background: #3b82f6;
             transition: width 0.3s ease;
@@ -188,6 +188,13 @@
                             @click.away="open = false"
                             x-transition
                             class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg border border-gray-100 z-50">
+                            @if(Auth::user()->isAdmin())
+                                <a href="{{ route('admin.dashboard') }}"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                                Dashboard
+                                </a>
+                            @endif
+
                             <a href="{{ route('profile.show') }}"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
                             Profile

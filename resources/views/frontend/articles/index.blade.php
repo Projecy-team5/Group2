@@ -12,8 +12,8 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         @forelse($articles as $article)
 
-            <article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden">
-                <div class="p-6">
+            <article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden flex flex-col h-full">
+                <div class="p-6 flex-1 flex flex-col">
                     @if($article->categories->count())
                         <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full mb-3">
                             {{ $article->categories->first()->name }}
@@ -25,12 +25,12 @@
                     </h2>
 
                     @if($article->excerpt)
-                        <p class="text-gray-600 mb-4 line-clamp-3">
+                        <p class="text-gray-600 mb-4 line-clamp-3 flex-1">
                             {{ $article->excerpt }}
                         </p>
                     @endif
 
-                    <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+                    <div class="flex items-center justify-between text-sm text-gray-500 mb-4 mt-auto">
                         <span>{{ $article->published_at }}</span>
                         <span>{{ \Illuminate\Support\Str::readingTime($article->content) }} min read</span>
                     </div>

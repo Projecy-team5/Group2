@@ -1,5 +1,8 @@
 {{-- resources/views/admin/scholarships/edit.blade.php --}}
 @extends('layouts.dashboard')
+@php
+    use Illuminate\Support\Facades\Storage;
+@endphp
 @push('styles')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 @endpush
@@ -421,12 +424,12 @@
                                                 $imageUrl = Storage::url($normalized);
                                             }
                                         @endphp
-                                        <div class="relative group">
-                                            <img src="{{ $imageUrl }}"
+                                        <div class="relative group" id="img-wrapper-{{ $img->id }}">
+                                            <img src="{{ $imageUrl }}" id="img-{{ $img->id }}"
                                                 class="rounded-lg h-28 w-full object-cover border border-gray-200 shadow transition-all"
                                                 alt="Gallery image">
                                             <button type="button"
-                                                class="toggle-existing absolute top-2 right-2 bg-white/85 text-gray-700 hover:bg-white p-1 rounded-full shadow hidden group-hover:flex"
+                                                class="toggle-existing absolute top-2 right-2 bg-white/85 text-gray-700 hover:bg-white hover:text-red-600 p-1.5 rounded-full shadow flex items-center justify-center transition-all"
                                                 data-id="{{ $img->id }}" aria-label="Mark for removal">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -436,7 +439,7 @@
                                                 </svg>
                                             </button>
                                             <span id="label-{{ $img->id }}"
-                                                class="existing-label hidden absolute bottom-2 right-2 bg-white/80 text-xs px-2 py-0.5 rounded text-gray-700">Selected</span>
+                                                class="existing-label hidden absolute bottom-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded font-medium">Will be removed</span>
                                             <input type="checkbox" name="remove_gallery_images[]"
                                                 value="{{ $img->id }}" id="remove-img-{{ $img->id }}"
                                                 class="hidden">
@@ -446,12 +449,14 @@
                                     @endforelse
                                 </div>
 
+                                <input type="file" name="gallery_images[]" id="gallery_images"
+                                    accept="image/jpeg,image/jpg,image/png" multiple
+                                    class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                                 @if ($scholarship->images->count() < 10)
-                                    <input type="file" name="gallery_images[]" id="gallery_images"
-                                        accept="image/jpeg,image/jpg,image/png" multiple
-                                        class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                                     <p class="text-xs text-gray-500 mt-1">You may add up to
                                         {{ 10 - $scholarship->images->count() }} more images.</p>
+                                @else
+                                    <p class="text-xs text-orange-600 mt-1">You have reached the maximum of 10 images. Please remove some images before adding new ones.</p>
                                 @endif
                                 <div id="gallery-preview" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 hidden"></div>
 
@@ -474,7 +479,7 @@
                             class="px-6 py-3 border border-gray-300 bg-white text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition">
                             Cancel
                         </a>
-                        <button type="submit"
+                        <button type="submit" id="submit-btn"
                             class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-sm hover:shadow-md transition flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -624,27 +629,85 @@
             }
         });
 
-        window.addEventListener('click', function(event) {
+        // Handle removal button clicks
+        document.addEventListener('click', function(event) {
             const button = event.target.closest('.toggle-existing');
             if (!button) {
                 return;
             }
 
+            event.preventDefault();
+            event.stopPropagation();
+
             const id = button.dataset.id;
             const checkbox = document.getElementById('remove-img-' + id);
             const label = document.getElementById('label-' + id);
-            const image = button.closest('.group')?.querySelector('img');
+            const image = document.getElementById('img-' + id);
+
+            console.log('Button clicked for image ID:', id);
+            console.log('Checkbox element:', checkbox);
+            console.log('Label element:', label);
+            console.log('Image element:', image);
+
+            if (!checkbox) {
+                console.error('Checkbox not found for image ID:', id);
+                return;
+            }
 
             checkbox.checked = !checkbox.checked;
+
             if (checkbox.checked) {
                 button.classList.add('bg-red-500', 'text-white');
-                image?.classList.add('ring-4', 'ring-red-500');
+                button.classList.remove('bg-white/85', 'text-gray-700');
+                image?.classList.add('ring-4', 'ring-red-500', 'opacity-50');
                 label?.classList.remove('hidden');
+                console.log('✓ Marked image for removal:', id, 'Checkbox checked:', checkbox.checked);
             } else {
                 button.classList.remove('bg-red-500', 'text-white');
-                image?.classList.remove('ring-4', 'ring-red-500');
+                button.classList.add('bg-white/85', 'text-gray-700');
+                image?.classList.remove('ring-4', 'ring-red-500', 'opacity-50');
                 label?.classList.add('hidden');
+                console.log('✗ Unmarked image:', id, 'Checkbox checked:', checkbox.checked);
             }
         });
+
+        // Debug form submission
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                console.log('=== FORM SUBMISSION DEBUG ===');
+
+                // Check all checkboxes for removal
+                const removeCheckboxes = document.querySelectorAll('input[name="remove_gallery_images[]"]');
+                const checkedIds = [];
+
+                removeCheckboxes.forEach(cb => {
+                    console.log('Checkbox ID:', cb.id, 'Value:', cb.value, 'Checked:', cb.checked);
+                    if (cb.checked) {
+                        checkedIds.push(cb.value);
+                    }
+                });
+
+                console.log('Images marked for removal:', checkedIds);
+                console.log('Total images to remove:', checkedIds.length);
+
+                // Check new files
+                const fileInput = document.getElementById('gallery_images');
+                if (fileInput && fileInput.files.length > 0) {
+                    console.log('New files to upload:', fileInput.files.length);
+                    Array.from(fileInput.files).forEach((file, idx) => {
+                        console.log(`File ${idx + 1}:`, file.name, file.size, 'bytes');
+                    });
+                } else {
+                    console.log('No new files to upload');
+                }
+
+                console.log('=== END FORM DEBUG ===');
+
+                // Allow form to submit
+                // Uncomment below to prevent submission for testing
+                // e.preventDefault();
+            });
+        }
     </script>
 @endpush
