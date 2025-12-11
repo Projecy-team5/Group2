@@ -4,7 +4,7 @@
         <div class="space-y-4">
             <div class="flex items-center py-2 justify-between gap-4">
                 <div class="flex items-center gap-4 flex-1">
-                    <h1 class="text-3xl font-bold text-gray-900">Scholarships Management</h1>
+                    <h1 class="text-xl font-bold text-gray-900">{{ __('Scholarships Management') }}</h1>
                 </div>
                 <div class="space-x-2">
                     <a href="{{ route('admin.scholarships.create') }}"
@@ -15,7 +15,7 @@
                             <path d="M5 12h14"></path>
                             <path d="M12 5v14"></path>
                         </svg>
-                        Add Scholarship
+                        {{ __('Add Scholarship') }}
                     </a>
                 </div>
             </div>
@@ -27,22 +27,22 @@
                         <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                Scholarship Name</th>
+                                {{ __('Scholarship Name') }}</th>
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                Award Amount</th>
+                                {{ __('Award Amount') }}</th>
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                Country</th>
+                                {{ __('Country') }}</th>
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                Status</th>
+                                {{ __('Status') }}</th>
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                Deadline</th>
+                                {{ __('Deadline') }}</th>
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 w-[100px]">
-                                Actions</th>
+                                {{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="[&_tr:last-child]:border-0">
@@ -78,8 +78,7 @@
                                             <line x1="12" x2="12" y1="2" y2="22"></line>
                                             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                                         </svg>
-                                        <span
-                                            class="font-medium text-gray-700">${{ ($scholarship->award_amount) }}</span>
+                                        <span class="font-medium text-gray-700">${{ $scholarship->award_amount }}</span>
                                     </div>
                                 </td>
                                 <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
@@ -95,8 +94,9 @@
                                     </div>
                                 </td>
                                 <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
-                                    <div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 font-medium
-                                        @if($scholarship->status === 'active') text-green-700 border-green-300 bg-green-50
+                                    <div
+                                        class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 font-medium
+                                        @if ($scholarship->status === 'active') text-green-700 border-green-300 bg-green-50
                                         @elseif($scholarship->status === 'inactive') text-yellow-700 border-yellow-300 bg-yellow-50
                                         @else text-red-700 border-red-300 bg-red-50 @endif">
                                         ● {{ ucfirst($scholarship->status) }}
@@ -123,8 +123,8 @@
                                             class="inline-flex items-center justify-center w-8 h-8 text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                             onclick="toggleScholarshipDropdown(event, 'scholarship-dropdown-{{ $scholarship->id }}', this)">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round">
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <circle cx="12" cy="12" r="1"></circle>
                                                 <circle cx="12" cy="5" r="1"></circle>
                                                 <circle cx="12" cy="19" r="1"></circle>
@@ -143,7 +143,7 @@
                                                         <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                                                         <circle cx="12" cy="12" r="3"></circle>
                                                     </svg>
-                                                    View details
+                                                    {{ __('View details') }}
                                                 </a>
                                                 <a href="{{ route('admin.scholarships.edit', $scholarship) }}"
                                                     class="flex items-center px-4 py-2 text-sm text-gray-700 transition hover:bg-blue-50 hover:text-blue-700">
@@ -151,13 +151,14 @@
                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                                         class="mr-2">
-                                                        <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7">
+                                                        <path
+                                                            d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7">
                                                         </path>
                                                         <path
                                                             d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z">
                                                         </path>
                                                     </svg>
-                                                    Edit scholarship
+                                                    {{ __('Edit scholarship') }}
                                                 </a>
                                                 <form action="{{ route('admin.scholarships.destroy', $scholarship) }}"
                                                     method="POST" class="delete-form">
@@ -166,15 +167,15 @@
                                                     <button type="button"
                                                         class="flex w-full items-center px-4 py-2 text-sm text-rose-600 transition hover:bg-rose-50 hover:text-rose-700"
                                                         onclick="showDeleteModal(this.form)">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                            class="mr-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                            height="16" viewBox="0 0 24 24" fill="none"
+                                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" class="mr-2">
                                                             <polyline points="3 6 5 6 21 6" />
                                                             <path
                                                                 d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                                                         </svg>
-                                                        Delete
+                                                        {{ __('Delete') }}
                                                     </button>
                                                 </form>
                                             </div>
@@ -196,7 +197,7 @@
                                             <path d="M22 10v6"></path>
                                             <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
                                         </svg>
-                                        <span>No scholarships found</span>
+                                        <span>{{__('No scholarships found')}}</span>
                                     </div>
                                 </td>
                             </tr>
@@ -278,7 +279,7 @@
                             @if ($scholarships->hasMorePages())
                                 <a href="{{ $scholarships->nextPageUrl() }}"
                                     class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
-                                    <span class="sr-only">Next</span>
+                                    <span class="sr-only">{{ __('Next') }}</span>
                                     <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-5 w-5">
                                         <path fill-rule="evenodd"
                                             d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
@@ -288,7 +289,7 @@
                             @else
                                 <span
                                     class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 cursor-not-allowed">
-                                    <span class="sr-only">Next</span>
+                                    <span class="sr-only">{{ __('Next') }}</span>
                                     <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-5 w-5">
                                         <path fill-rule="evenodd"
                                             d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
@@ -342,7 +343,7 @@
             }
         }
 
-        document.addEventListener('click', function (event) {
+        document.addEventListener('click', function(event) {
             const insideDropdown = event.target.closest('[id^="scholarship-dropdown-"]') ||
                 event.target.closest('button[onclick*="toggleScholarshipDropdown"]');
 

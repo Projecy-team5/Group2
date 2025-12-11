@@ -61,7 +61,7 @@
     <aside id="dashboardSidebar"
         class="dashboard-sidebar sidebar-desktop-expanded group fixed inset-y-0 left-0 z-50 w-64 transform -translate-x-full bg-white border-r border-gray-200 shadow-sm transition-all duration-300 ease-in-out lg:translate-x-0">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 lg:hidden">
-            <span class="text-sm font-semibold text-gray-700">Navigation</span>
+            <span class="text-sm font-semibold text-gray-700">{{ __('Navigation') }}</span>
             <button type="button" class="p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                 data-sidebar-close aria-label="Close sidebar">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,12 +89,12 @@
                             d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 7 4-4 4 4"></path>
                     </svg>
-                    <span class="sidebar-label">Dashboard</span>
+                    <span class="sidebar-label">{{ __('Dashboard') }}</span>
                 </a>
             </div>
             <div class="pt-2">
                 <h3 class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-hover-show">
-                    Management
+                    {{ __('Management') }}
                 </h3>
                 <div class="mt-2 space-y-1">
                     <a href="{{ route('admin.users.index') }}"
@@ -108,7 +108,7 @@
                                 d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z">
                             </path>
                         </svg>
-                        <span class="sidebar-label">Users</span>
+                        <span class="sidebar-label">{{ __('Users') }}</span>
                     </a>
                     <a href="{{ route('admin.roles.index') }}"
                         class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all
@@ -120,7 +120,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 2l7 4v6c0 5-3.8 9.4-7 10-3.2-.6-7-5-7-10V6l7-4z"></path>
                         </svg>
-                        <span class="sidebar-label">Roles</span>
+                        <span class="sidebar-label">{{ __('Roles') }}</span>
                     </a>
                     <a href="{{ route('admin.applications.index') }}"
                         class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all
@@ -131,7 +131,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
-                        <span class="sidebar-label">Applications</span>
+                        <span class="sidebar-label">{{ __('Applications') }}</span>
                     </a>
                     <a href="{{ route('admin.scholarships.index') }}"
                         class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all
@@ -143,7 +143,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
-                        <span class="sidebar-label">Scholarships</span>
+                        <span class="sidebar-label">{{ __('Scholarships') }}</span>
                     </a>
                     <a href="{{ route('admin.articles.index') }}"
                         class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all
@@ -155,7 +155,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
-                        <span class="sidebar-label">Articles</span>
+                        <span class="sidebar-label">{{ __('Articles') }}</span>
                     </a>
                     <a href="{{ route('admin.categories.index') }}"
                         class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all
@@ -167,7 +167,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
-                        <span class="sidebar-label">Article Categories</span>
+                        <span class="sidebar-label">{{ __('Article Categories') }}</span>
                     </a>
                     <a href="{{ route('admin.contacts.index') }}"
                         class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all
@@ -180,7 +180,7 @@
                                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
                             </path>
                         </svg>
-                        <span class="sidebar-label">Contact Messages</span>
+                        <span class="sidebar-label">{{ __('Contact Messages') }}</span>
                         @if (($unreadContactCount ?? 0) > 0)
                             <span
                                 class="ml-auto inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
@@ -192,7 +192,7 @@
             </div>
             <div class="pt-2">
                 <h3 class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-hover-show">
-                    Configuration
+                    {{ __('Configuration') }}
                 </h3>
                 <div class="mt-2 space-y-1">
                     <a href="{{ route('admin.business-settings.edit') }}"
@@ -206,7 +206,7 @@
                                 d="M12 6V4m0 2a4 4 0 014 4v1h1a3 3 0 013 3v4H6v-4a3 3 0 013-3h1V10a4 4 0 014-4zm-6 9h12v4H6v-4z">
                             </path>
                         </svg>
-                        <span class="sidebar-label">Business Settings</span>
+                        <span class="sidebar-label">{{ __('Business Settings') }}</span>
                     </a>
                 </div>
             </div>

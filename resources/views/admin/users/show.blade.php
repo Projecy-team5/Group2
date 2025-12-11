@@ -1,21 +1,23 @@
 @extends('layouts.dashboard')
 
+@section('title', __('User Details'))
+
 @section('content')
     <div class="p-6 pt-0 space-y-6">
         <div class="rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 px-6 py-5">
                 <div>
-                    <h1 class="text-3xl font-bold text-slate-900">User Details</h1>
-                    <p class="text-sm text-slate-500">A quick snapshot of this account.</p>
+                    <h1 class="text-xl font-bold text-slate-900">{{ __('User Details') }}</h1>
+                    <p class="text-sm text-slate-500">{{ __('A quick snapshot of this account.') }}</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <a href="{{ route('admin.users.index') }}"
                         class="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm transition hover:border-slate-300 hover:bg-slate-50">
-                        ← Back to list
+                        {{ __('← Back to list') }}
                     </a>
                     <a href="{{ route('admin.users.edit', $user) }}"
                         class="inline-flex items-center gap-2 rounded-xl bg-sky-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-600">
-                        Edit User
+                        {{ __('Edit User') }}
                     </a>
                 </div>
             </div>
@@ -33,15 +35,15 @@
                         @endif
                         <div>
                             <h2 class="text-2xl font-semibold text-slate-900">{{ $user->name }}</h2>
-                            <p class="text-sm text-slate-500">ID #{{ $user->id }}</p>
+                            <p class="text-sm text-slate-500">{{ __('ID #:id', ['id' => $user->id]) }}</p>
                             <div class="mt-3 flex flex-wrap gap-2">
                                 @if ($user->email_verified_at)
                                     <span class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-                                        Verified
+                                        {{ __('Verified') }}
                                     </span>
                                 @else
                                     <span class="inline-flex items-center rounded-full bg-rose-50 px-3 py-1 text-xs font-semibold text-rose-700">
-                                        Unverified
+                                        {{ __('Unverified') }}
                                     </span>
                                 @endif
                                 @if ($user->role)
@@ -55,19 +57,19 @@
                     <div class="flex-1 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                         <dl class="grid grid-cols-1 gap-4 text-sm text-slate-600 sm:grid-cols-2">
                             <div>
-                                <dt class="font-semibold text-slate-500">Email</dt>
+                                <dt class="font-semibold text-slate-500">{{ __('Email') }}</dt>
                                 <dd class="text-slate-800">{{ $user->email }}</dd>
                             </div>
                             <div>
-                                <dt class="font-semibold text-slate-500">Role</dt>
+                                <dt class="font-semibold text-slate-500">{{ __('Role') }}</dt>
                                 <dd class="text-slate-800">{{ $user->role->name ?? '—' }}</dd>
                             </div>
                             <div>
-                                <dt class="font-semibold text-slate-500">Member since</dt>
+                                <dt class="font-semibold text-slate-500">{{ __('Member since') }}</dt>
                                 <dd class="text-slate-800">{{ $user->created_at->format('M d, Y') }}</dd>
                             </div>
                             <div>
-                                <dt class="font-semibold text-slate-500">Last updated</dt>
+                                <dt class="font-semibold text-slate-500">{{ __('Last updated') }}</dt>
                                 <dd class="text-slate-800">{{ $user->updated_at->format('M d, Y') }}</dd>
                             </div>
                         </dl>
@@ -80,7 +82,7 @@
                         <button type="button"
                             class="inline-flex items-center gap-2 rounded-xl border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 shadow-sm transition hover:bg-rose-50"
                             onclick="showDeleteModal(this.form)">
-                            Delete User
+                            {{ __('Delete User') }}
                         </button>
                     </form>
                 </div>

@@ -33,7 +33,9 @@ class ApplicationController extends Controller
             'address' => $request->address,
         ]);
 
-        return redirect()->back()->with('success', 'Application submitted!');
+        return redirect()
+            ->route('scholarships.show', $scholarship)
+            ->with('success', 'Application submitted!');
     }
 
     // List all applications for admin

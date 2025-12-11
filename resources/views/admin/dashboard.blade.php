@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Admin Dashboard')
+@section('title', __('Admin Dashboard'))
 
 @section('content')
     @php
@@ -10,31 +10,31 @@
     <div class="p-6 space-y-8">
         <div class="flex flex-col gap-2">
             <h1 class="text-2xl font-bold text-gray-900">{{ __('Admin Dashboard') }}</h1>
-            <p class="text-sm text-gray-500">Monitor platform health, applications flow, and top-performing scholarships.</p>
+            <p class="text-sm text-gray-500">{{ __('Monitor platform health, applications flow, and top-performing scholarships.') }}</p>
         </div>
 
         <section class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                <p class="text-sm font-medium text-gray-500">Total users</p>
+                <p class="text-sm font-medium text-gray-500">{{ __('Total users') }}</p>
                 <p class="mt-3 text-3xl font-semibold text-gray-900">{{ number_format($stats['users']) }}</p>
-                <p class="mt-2 text-xs text-gray-400">Last signup:
+                <p class="mt-2 text-xs text-gray-400">{{ __('Last signup:') }}
                     {{ optional($latestApplication?->user)->created_at?->diffForHumans() ?? '—' }}</p>
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                <p class="text-sm font-medium text-gray-500">Scholarships published</p>
+                <p class="text-sm font-medium text-gray-500">{{ __('Scholarships published') }}</p>
                 <p class="mt-3 text-3xl font-semibold text-gray-900">{{ number_format($stats['scholarships']) }}</p>
-                <p class="mt-2 text-xs text-gray-400">Including inactive drafts.</p>
+                <p class="mt-2 text-xs text-gray-400">{{ __('Including inactive drafts.') }}</p>
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                <p class="text-sm font-medium text-gray-500">Total applications</p>
+                <p class="text-sm font-medium text-gray-500">{{ __('Total applications') }}</p>
                 <p class="mt-3 text-3xl font-semibold text-gray-900">{{ number_format($stats['applications']) }}</p>
                 <p class="mt-2 text-xs text-emerald-600">
-                    {{ $trendChartData['data'][count($trendChartData['data']) - 1] ?? 0 }} submitted this month</p>
+                    {{ __(':count submitted this month', ['count' => $trendChartData['data'][count($trendChartData['data']) - 1] ?? 0]) }}</p>
             </div>
             <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                <p class="text-sm font-medium text-gray-500">Statuses monitored</p>
+                <p class="text-sm font-medium text-gray-500">{{ __('Statuses monitored') }}</p>
                 <p class="mt-3 text-3xl font-semibold text-gray-900">{{ count($statusCounts ?? []) }}</p>
-                <p class="mt-2 text-xs text-gray-400">Used in the distribution chart.</p>
+                <p class="mt-2 text-xs text-gray-400">{{ __('Used in the distribution chart.') }}</p>
             </div>
         </section>
 
@@ -42,11 +42,11 @@
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col">
                 <div class="flex items-start justify-between gap-3">
                     <div>
-                        <h2 class="text-lg font-semibold text-gray-900">Application status distribution</h2>
-                        <p class="text-sm text-gray-500">How review outcomes are trending.</p>
+                        <h2 class="text-lg font-semibold text-gray-900">{{ __('Application status distribution') }}</h2>
+                        <p class="text-sm text-gray-500">{{ __('How review outcomes are trending.') }}</p>
                     </div>
                     <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
-                        {{ $totalTrackedApplications }} total
+                        {{ __(':count total', ['count' => $totalTrackedApplications]) }}
                     </span>
                 </div>
                 <div class="mt-6 grow">
@@ -68,7 +68,7 @@
                             <dd class="text-gray-900 font-semibold">{{ $status }}</dd>
                         </div>
                     @empty
-                        <p class="text-sm text-gray-500">No applications yet. Insights will appear once submissions arrive.
+                        <p class="text-sm text-gray-500">{{ __('No applications yet. Insights will appear once submissions arrive.') }}
                         </p>
                     @endforelse
                 </dl>
@@ -77,11 +77,11 @@
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col">
                     <div class="flex items-start justify-between gap-3">
                         <div>
-                            <h2 class="text-lg font-semibold text-gray-900">Monthly submissions</h2>
-                            <p class="text-sm text-gray-500">Rolling six-month volume.</p>
+                            <h2 class="text-lg font-semibold text-gray-900">{{ __('Monthly submissions') }}</h2>
+                            <p class="text-sm text-gray-500">{{ __('Rolling six-month volume.') }}</p>
                         </div>
                         <span class="text-xs font-semibold text-sky-600 bg-sky-50 px-3 py-1 rounded-full">
-                            {{ $trendChartData['data'][count($trendChartData['data']) - 1] ?? 0 }} this month
+                            {{ __(':count this month', ['count' => $trendChartData['data'][count($trendChartData['data']) - 1] ?? 0]) }}
                         </span>
                     </div>
                     <div class="mt-6 grow">
@@ -91,24 +91,24 @@
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h2 class="text-lg font-semibold text-gray-900">Top scholarships</h2>
-                            <p class="text-sm text-gray-500">Most popular by application count.</p>
+                            <h2 class="text-lg font-semibold text-gray-900">{{ __('Top scholarships') }}</h2>
+                            <p class="text-sm text-gray-500">{{ __('Most popular by application count.') }}</p>
                         </div>
-                        <span class="text-xs text-gray-500">Last 6 months</span>
+                        <span class="text-xs text-gray-500">{{ __('Last 6 months') }}</span>
                     </div>
                     <ul class="mt-4 divide-y divide-gray-100">
                         @forelse ($topScholarships as $scholarship)
                             <li class="py-3 flex items-center justify-between">
                                 <div>
                                     <p class="font-medium text-gray-900">{{ $scholarship->scholarship_name }}</p>
-                                    <p class="text-xs text-gray-500">Status:
-                                        {{ \Illuminate\Support\Str::headline($scholarship->status ?? 'Unknown') }}</p>
+                                    <p class="text-xs text-gray-500">{{ __('Status:') }}
+                                        {{ \Illuminate\Support\Str::headline(__($scholarship->status ?? 'Unknown')) }}</p>
                                 </div>
                                 <span class="text-sm font-semibold text-gray-900">{{ $scholarship->applications_count }}
-                                    apps</span>
+                                    {{ __('apps') }}</span>
                             </li>
                         @empty
-                            <li class="py-3 text-sm text-gray-500">No applications have been submitted yet.</li>
+                            <li class="py-3 text-sm text-gray-500">{{ __('No applications have been submitted yet.') }}</li>
                         @endforelse
                     </ul>
                 </div>
@@ -117,11 +117,11 @@
 
         <section class="bg-white rounded-2xl border border-gray-100 shadow-sm">
             <div class="p-6 border-b border-gray-100">
-                <h2 class="text-lg font-semibold text-gray-900">Latest applications</h2>
-                <p class="text-sm text-gray-500">Five most recent submissions across all scholarships.</p>
+                <h2 class="text-lg font-semibold text-gray-900">{{ __('Latest applications') }}</h2>
+                <p class="text-sm text-gray-500">{{ __('Five most recent submissions across all scholarships.') }}</p>
             </div>
             @if ($latestApplications->isEmpty())
-                <div class="p-6 text-sm text-gray-500">No applications have been submitted yet.</div>
+                <div class="p-6 text-sm text-gray-500">{{ __('No applications have been submitted yet.') }}</div>
             @else
                 <ul class="divide-y divide-gray-100">
                     @foreach ($latestApplications as $application)
@@ -129,14 +129,14 @@
                             <div>
                                 <p class="font-semibold text-gray-900">{{ $application->user->name }}</p>
                                 <p class="text-sm text-gray-500">
-                                    Applied for <span
+                                    {{ __('Applied for') }} <span
                                         class="text-primary">{{ $application->scholarship->scholarship_name }}</span>
                                 </p>
                             </div>
                             <div class="flex items-center gap-4">
                                 <span
                                     class="inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-semibold text-gray-700 bg-gray-100">
-                                    {{ \Illuminate\Support\Str::headline($application->status ?? 'Pending') }}
+                                    {{ \Illuminate\Support\Str::headline(__($application->status ?? 'Pending')) }}
                                 </span>
                                 <span class="text-xs text-gray-500">{{ $application->created_at->diffForHumans() }}</span>
                             </div>
@@ -150,6 +150,10 @@
 
 @push('scripts')
     <script>
+        window.dashboardTranslations = {
+            noData: @js(__('No data')),
+            totalLabel: @js(__('Total')),
+        };
         const dashboardChartColors = ['#0ea5e9', '#22c55e', '#f59e0b', '#a855f7', '#f43f5e', '#6b7280'];
 
         const setupCanvas = (canvas) => {
@@ -190,7 +194,7 @@
                 ctx.font = '14px sans-serif';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText('No data', centerX, centerY);
+                ctx.fillText(window.dashboardTranslations.noData, centerX, centerY);
             } else {
                 let startAngle = -Math.PI / 2;
                 dataset.data.forEach((value, index) => {
@@ -229,7 +233,7 @@
 
                 ctx.fillStyle = '#6b7280';
                 ctx.font = '12px sans-serif';
-                ctx.fillText('Total', centerX, centerY + 12);
+                ctx.fillText(window.dashboardTranslations.totalLabel, centerX, centerY + 12);
             }
 
             // Cut out center for doughnut effect

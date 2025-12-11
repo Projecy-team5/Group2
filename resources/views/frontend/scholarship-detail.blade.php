@@ -5,6 +5,22 @@
     <div class="bg-gray-50 min-h-screen py-12 px-4">
         <div class="max-w-7xl mx-auto">
 
+            @if(session('success'))
+                <div class="mb-8">
+                    <div class="flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 p-4 shadow-sm">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600">
+                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-green-800">{{ __('Success!') }}</p>
+                            <p class="text-sm text-green-700">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <!-- Header -->
             <div class="text-center mb-12">
                 <h1 class="text-4xl font-bold text-gray-900">{{ $scholarship->scholarship_name }}</h1>

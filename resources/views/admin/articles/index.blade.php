@@ -1,11 +1,13 @@
 @extends('layouts.dashboard')
 
+@section('title', __('Articles Library'))
+
 @section('content')
     <div class="p-6 pt-0">
         <div class="space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex-1 min-w-[240px]">
-                    <h1 class="text-3xl font-bold text-gray-900">Articles Library</h1>
+                    <h1 class="text-xl font-bold text-gray-900">{{ __('Articles Library') }}</h1>
                 </div>
                 <div class="space-x-2 mt-3">
                     <a href="{{ route('admin.articles.create') }}"
@@ -16,7 +18,7 @@
                             <path d="M5 12h14"></path>
                             <path d="M12 5v14"></path>
                         </svg>
-                        Write Article
+                        {{ __('Write Article') }}
                     </a>
                 </div>
             </div>
@@ -39,19 +41,19 @@
                             <tr class="border-b transition-colors">
                                 <th
                                     class="h-12 px-4 text-left align-middle font-medium text-gray-500 [&:has([role=checkbox])]:pr-0">
-                                    Article</th>
+                                    {{ __('Article') }}</th>
                                 <th
                                     class="h-12 px-4 text-left align-middle font-medium text-gray-500 [&:has([role=checkbox])]:pr-0">
-                                    Categories</th>
+                                    {{ __('Categories') }}</th>
                                 <th
                                     class="h-12 px-4 text-left align-middle font-medium text-gray-500 [&:has([role=checkbox])]:pr-0">
-                                    Published</th>
+                                    {{ __('Published') }}</th>
                                 <th
                                     class="h-12 px-4 text-left align-middle font-medium text-gray-500 [&:has([role=checkbox])]:pr-0">
-                                    Updated</th>
+                                    {{ __('Updated') }}</th>
                                 <th
                                     class="h-12 px-4 text-left align-middle font-medium text-gray-500 [&:has([role=checkbox])]:pr-0 w-[120px]">
-                                    Actions</th>
+                                    {{ __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="[&_tr:last-child]:border-0">
@@ -66,7 +68,7 @@
                                                 </p>
                                                 <span
                                                     class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $article->published ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200' }}">
-                                                    {{ $article->published ? 'Published' : 'Draft' }}
+                                                    {{ $article->published ? __('Published') : __('Draft') }}
                                                 </span>
                                             </div>
                                             <p class="text-xs text-gray-500">
@@ -86,7 +88,7 @@
                                                     {{ $category->name }}
                                                 </span>
                                             @empty
-                                                <span class="text-xs text-gray-400">No categories</span>
+                                                <span class="text-xs text-gray-400">{{ __('No categories') }}</span>
                                             @endforelse
                                             @if ($remaining > 0)
                                                 <span
@@ -108,7 +110,7 @@
                                                 <span>{{ $article->published_at->format('M j, Y') }}</span>
                                             </div>
                                         @else
-                                            <span class="text-xs font-medium text-gray-400">Not scheduled</span>
+                                            <span class="text-xs font-medium text-gray-400">{{ __('Not scheduled') }}</span>
                                         @endif
                                     </td>
                                     <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
@@ -144,7 +146,7 @@
                                                             <path d="M11 7h13v13"></path>
                                                             <path d="m2 22 10-10"></path>
                                                         </svg>
-                                                        View on site
+                                                        {{ __('View on site') }}
                                                     </a>
                                                     <a href="{{ route('admin.articles.edit', $article) }}"
                                                         class="flex items-center px-4 py-2 text-sm text-gray-700 transition hover:bg-blue-50 hover:text-blue-700">
@@ -155,7 +157,7 @@
                                                             <path d="M12 20h9" />
                                                             <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
                                                         </svg>
-                                                        Edit article
+                                                        {{ __('Edit article') }}
                                                     </a>
                                                     <form action="{{ route('admin.articles.destroy', $article) }}"
                                                         method="POST" class="delete-form">
@@ -173,7 +175,7 @@
                                                                 <path
                                                                     d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                                                             </svg>
-                                                            Delete
+                                                            {{ __('Delete') }}
                                                         </button>
                                                     </form>
                                                 </div>
@@ -190,7 +192,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="m18 13 6-6-6-6M11 7h13v13M2 22l10-10" />
                                             </svg>
-                                            No articles yet. Start writing your first story!
+                                            {{ __('No articles yet. Start writing your first story!') }}
                                         </div>
                                     </td>
                                 </tr>
@@ -203,8 +205,7 @@
             @if ($articles->hasPages())
                 <div class="rounded-lg border border-gray-200 bg-white px-4 py-3">
                     <div class="flex flex-col gap-3 text-sm text-gray-700 sm:flex-row sm:items-center sm:justify-between">
-                        <span>Showing {{ $articles->firstItem() ?? 0 }} to {{ $articles->lastItem() ?? 0 }} of
-                            {{ $articles->total() }} results</span>
+                        <span>{{ __('Showing :from to :to of :total results', ['from' => $articles->firstItem() ?? 0, 'to' => $articles->lastItem() ?? 0, 'total' => $articles->total()]) }}</span>
                         <div class="flex items-center space-x-2">
                             {{ $articles->links() }}
                         </div>

@@ -16,11 +16,13 @@
                                 <path
                                     d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
                             </svg>
-                            Scholarship Information
+                            {{ __('Scholarship Information') }}
                         </h2>
-                        <p class="text-sm text-gray-600 mt-1">Enter the scholarship details, requirements, and
-                            application
-                            information</p>
+                        <p class="text-sm text-gray-600 mt-1">
+                            {{ __('Enter the scholarship details, requirements, and
+                                                        application
+                                                        information') }}
+                        </p>
                     </div>
                     <form action="{{ route('admin.scholarships.store') }}" method="POST" enctype="multipart/form-data"
                         class="p-6">
@@ -37,7 +39,7 @@
                                             <path d="M2 17l10 5 10-5" />
                                             <path d="M2 12l10 5 10-5" />
                                         </svg>
-                                        Scholarship Name
+                                        {{ __('Scholarship Name') }}
                                     </label>
                                     <div class="relative">
                                         <input type="text" name="scholarship_name" id="scholarship_name"
@@ -76,17 +78,16 @@
                                             <circle cx="12" cy="12" r="10" />
                                             <path d="M9 12l2 2 4-4" />
                                         </svg>
-                                        Status
                                     </label>
                                     <div class="relative">
                                         <select name="status" id="status"
                                             class="block w-full pl-10 pr-8 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                                             required>
                                             <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>
-                                                Active
+                                                {{ __('Active') }}
                                             </option>
                                             <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>
-                                                Inactive</option>
+                                                {{ __('Inactive') }}</option>
                                             {{-- <option value="closed" {{ old('status') == 'closed' ? 'selected' : '' }}>Closed --}}
                                             </option>
                                         </select>
@@ -126,7 +127,7 @@
                                             <line x1="12" y1="1" x2="12" y2="23" />
                                             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                                         </svg>
-                                        Award Amount
+                                        {{ __('Award Amount') }}
                                     </label>
                                     <div class="relative">
                                         <input type="number" name="award_amount" id="award_amount"
@@ -167,7 +168,7 @@
                                             <path d="M8 12h8" />
                                             <path d="M12 8v8" />
                                         </svg>
-                                        Country
+                                        {{ __('Country') }}
                                     </label>
                                     <div class="relative">
                                         <input type="text" name="country" id="country"
@@ -211,7 +212,7 @@
                                             <line x1="8" y1="2" x2="8" y2="6" />
                                             <line x1="3" y1="10" x2="21" y2="10" />
                                         </svg>
-                                        Application Deadline
+                                        {{ __('Application Deadline') }}
                                     </label>
                                     <div class="relative">
                                         <input type="text" name="application_deadline" id="application_deadline"
@@ -254,7 +255,7 @@
                                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                                         <path d="M22 4L12 14.01l-3-3" />
                                     </svg>
-                                    Eligibility Criteria
+                                    {{ __('Eligibility Criteria') }}
                                 </label>
                                 <div class="relative">
                                     <textarea name="eligibility_criteria" id="eligibility_criteria" rows="4"
@@ -295,7 +296,7 @@
                                         <line x1="16" y1="17" x2="8" y2="17" />
                                         <line x1="10" y1="9" x2="8" y2="9" />
                                     </svg>
-                                    Application Description
+                                    {{ __('Application Description') }}
                                 </label>
                                 <div class="relative">
                                     <textarea name="application_description" id="application_description" rows="4"
@@ -339,7 +340,7 @@
                                             <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3" />
                                             <path d="M3 12v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6" />
                                         </svg>
-                                        Application Requirements
+                                           {{__('Application Requirements')}}
                                     </label>
                                     <div class="bg-gray-50 rounded-lg border">
                                         <div id="requirements-container" class="space-y-3">
@@ -405,14 +406,14 @@
                                             <circle cx="8.5" cy="8.5" r="1.5" />
                                             <polyline points="21 15 16 10 5 21" />
                                         </svg>
-                                        Scholarship Gallery Images
+                                        {{__('Scholarship Gallery Images')}}
                                     </label>
                                     <input type="file" id="gallery_images" name="gallery_images[]"
                                         accept="image/jpeg,image/png,image/jpg" multiple max="10"
                                         class="block w-full text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700">
-                                    <p class="text-xs text-gray-500 mt-1">You may upload up to 10 images (JPG, JPEG,
+                                    <p class="text-xs text-gray-500 mt-1">{{ __('You may upload up to 10 images (JPG, JPEG,
                                         PNG,
-                                        2MB each).</p>
+                                        2MB each.') }}</p>
                                     <div id="gallery-preview" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 hidden">
                                     </div>
                                     @error('gallery_images')
@@ -440,7 +441,7 @@
                                     <path d="M18 6 6 18" />
                                     <path d="M6 6l12 12" />
                                 </svg>
-                                Cancel
+                                {{ __('Cancel') }}
                             </a>
                             <button type="submit"
                                 class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 font-medium shadow-sm hover:shadow-md">
@@ -450,7 +451,7 @@
                                     <path d="M5 12h14" />
                                     <path d="M12 5v14" />
                                 </svg>
-                                Create Scholarship
+                                {{ __('Create Scholarship') }}
                             </button>
                         </div>
                     </form>

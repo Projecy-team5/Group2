@@ -14,8 +14,8 @@
                         </svg>
                     </span>
                     <div>
-                        <h2 class="text-lg font-semibold text-gray-900">Category Details</h2>
-                        <p class="text-sm text-gray-500">Name the collection and add a short description for editors.</p>
+                        <h2 class="text-lg font-semibold text-gray-900">{{__('Category Details')}}</h2>
+                        <p class="text-sm text-gray-500">{{__('Name the collection and add a short description for editors.')}}</p>
                     </div>
                 </div>
                 <form action="{{ route('admin.categories.store') }}" method="POST" class="px-6 py-6">
@@ -23,8 +23,8 @@
                     <div class="space-y-6">
                         <div class="group">
                             <div class="flex items-center justify-between">
-                                <label for="name" class="text-sm font-medium text-gray-700">Category name</label>
-                                <span class="text-xs font-medium uppercase tracking-wide text-gray-400">Required</span>
+                                <label for="name" class="text-sm font-medium text-gray-700">{{__('Category name')}}</label>
+                                <span class="text-xs font-medium uppercase tracking-wide text-gray-400">{{__('Required')}}</span>
                             </div>
                             <div class="relative mt-2">
                                 <input type="text" name="name" id="name" value="{{ old('name') }}" required
@@ -52,18 +52,18 @@
                                     {{ $message }}
                                 </div>
                             @enderror
-                            <p class="mt-2 text-xs text-gray-500">The slug is generated automatically and can be edited
+                            <p class="mt-2 text-xs text-gray-500">{{__('The slug is generated automatically and can be edited later.')}}</p>
                                 later.</p>
                         </div>
                         <div class="group">
                             <div class="flex items-center justify-between">
-                                <label for="description" class="text-sm font-medium text-gray-700">Description</label>
-                                <span class="text-xs font-medium text-gray-400">Optional</span>
+                                <label for="description" class="text-sm font-medium text-gray-700">{{__('Description')}}</label>
+                                <span class="text-xs font-medium text-gray-400">{{__('Optional')}}</span>
                             </div>
                             <div class="relative mt-2">
                                 <textarea name="description" id="description" rows="4"
                                     class="block w-full rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 pl-11 text-gray-900 shadow-sm transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Explain when to use this category">{{ old('description') }}</textarea>
+                                    placeholder="{{__('Explain when to use this category')}}">{{ old('description') }}</textarea>
                                 <span class="pointer-events-none absolute top-3 left-4 text-gray-400">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -72,14 +72,13 @@
                                     </svg>
                                 </span>
                             </div>
-                            <p class="mt-2 text-xs text-gray-500">Used on the detail page and within the newsroom filter
-                                panel.</p>
+                            <p class="mt-2 text-xs text-gray-500">{{__('Used on the detail page and within the newsroom filter panel.')}}</p>
                         </div>
                     </div>
                     <div class="mt-8 flex flex-wrap items-center justify-end gap-3 border-t border-gray-100 pt-5">
                         <a href="{{ route('admin.categories.index') }}"
                             class="inline-flex items-center gap-2 rounded-xl border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-700 transition hover:border-gray-300 hover:bg-gray-50">
-                            Cancel
+                            {{__('Cancel')}}
                         </a>
                         <button type="submit"
                             class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
@@ -87,7 +86,7 @@
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
-                            Create category
+                            {{__('Create category')}}
                         </button>
                     </div>
                 </form>

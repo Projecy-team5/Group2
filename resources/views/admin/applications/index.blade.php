@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Applications')
+@section('title', __('Applications'))
 
 @section('content')
 <div class="p-6 pt-0">
@@ -8,7 +8,7 @@
         <!-- Page Header -->
         <div class="flex items-center py-2 justify-between gap-4">
             <div class="flex items-center gap-4 flex-1">
-                <h1 class="text-3xl font-bold text-gray-900">Scholarship Applications</h1>
+                <h1 class="text-xl font-bold text-gray-900">{{ __('Scholarship Applications') }}</h1>
             </div>
         </div>
 
@@ -19,13 +19,13 @@
                 <table class="w-full caption-bottom text-sm">
                     <thead class="[&_tr]:border-b">
                         <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">ID</th>
-                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Applicant</th>
-                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Scholarship</th>
-                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Contact</th>
-                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
-                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Submitted</th>
-                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">Actions</th>
+                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">{{ __('ID') }}</th>
+                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">{{ __('Applicant') }}</th>
+                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">{{ __('Scholarship') }}</th>
+                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">{{ __('Contact') }}</th>
+                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">{{ __('Status') }}</th>
+                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground">{{ __('Submitted') }}</th>
+                            <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[100px]">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="[&_tr:last-child]:border-0">
@@ -57,7 +57,7 @@
                                                 title="{{ $application->user->name }}">
                                                 {{ $application->user->name }}
                                             </div>
-                                            <div class="text-xs text-gray-500">ID: {{ $application->user->id }}</div>
+                                            <div class="text-xs text-gray-500">{{ __('ID:') }} {{ $application->user->id }}</div>
                                         </div>
                                     </div>
                                 </td>
@@ -104,10 +104,16 @@
                                             'approved' => ['bg' => 'bg-green-50', 'text' => 'text-green-700', 'border' => 'border-green-200'],
                                             'rejected' => ['bg' => 'bg-red-50', 'text' => 'text-red-700', 'border' => 'border-red-200'],
                                         ];
+                                        $statusLabels = [
+                                            'pending' => __('Pending'),
+                                            'approved' => __('Approved'),
+                                            'rejected' => __('Rejected'),
+                                        ];
                                         $config = $statusConfig[$status] ?? ['bg' => 'bg-gray-50', 'text' => 'text-gray-700', 'border' => 'border-gray-200'];
+                                        $statusLabel = $statusLabels[$status] ?? ucfirst($status);
                                     @endphp
                                     <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium {{ $config['bg'] }} {{ $config['text'] }} {{ $config['border'] }}">
-                                        {{ ucfirst($status) }}
+                                        {{ $statusLabel }}
                                     </span>
                                 </td>
 
@@ -160,7 +166,7 @@
                                                             <line x1="16" y1="17" x2="8" y2="17"></line>
                                                             <polyline points="10 9 9 9 8 9"></polyline>
                                                         </svg>
-                                                        View Resume
+                                                        {{ __('View Resume') }}
                                                     </a>
                                                 @endif
 
@@ -174,7 +180,7 @@
                                                         <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                                                         <circle cx="12" cy="12" r="3"></circle>
                                                     </svg>
-                                                    View Essay
+                                                    {{ __('View Essay') }}
                                                 </button>
 
                                                 <div class="border-t border-gray-100 my-1"></div>
@@ -191,7 +197,7 @@
                                                                 class="mr-2">
                                                                 <polyline points="20 6 9 17 4 12"></polyline>
                                                             </svg>
-                                                            Approve Application
+                                                            {{ __('Approve Application') }}
                                                         </button>
                                                     </form>
                                                 @endif
@@ -209,7 +215,7 @@
                                                                 <line x1="18" y1="6" x2="6" y2="18"></line>
                                                                 <line x1="6" y1="6" x2="18" y2="18"></line>
                                                             </svg>
-                                                            Reject Application
+                                                            {{ __('Reject Application') }}
                                                         </button>
                                                     </form>
                                                 @endif
@@ -229,8 +235,8 @@
                                                 </path>
                                             </svg>
                                         </div>
-                                        <h3 class="text-xl font-semibold text-gray-900 mb-2">No applications yet</h3>
-                                        <p class="text-gray-500">Applications from students will appear here once they start applying.</p>
+                                        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ __('No applications yet') }}</h3>
+                                        <p class="text-gray-500">{{ __('Applications from students will appear here once they start applying.') }}</p>
                                     </div>
                                 </td>
                             </tr>
@@ -245,7 +251,7 @@
             <div class="mt-6">
                 <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white px-4 py-3 border rounded-lg">
                     <div class="text-sm text-gray-700">
-                        <span>Showing {{ $applications->firstItem() }} to {{ $applications->lastItem() }} of {{ $applications->total() }} results</span>
+                        <span>{{ __('Showing :from to :to of :total results', ['from' => $applications->firstItem(), 'to' => $applications->lastItem(), 'total' => $applications->total()]) }}</span>
                     </div>
                     <div class="flex items-center space-x-2">
                         {{ $applications->links() }}
@@ -260,7 +266,7 @@
 <div id="essayModal" class="hidden fixed inset-0 bg-gray-900/50 z-50 flex items-center justify-center p-4" onclick="closeEssayModal()">
     <div class="bg-white rounded-lg max-w-3xl w-full max-h-[80vh] overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
         <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900">Motivation Essay</h3>
+            <h3 class="text-lg font-semibold text-gray-900">{{ __('Motivation Essay') }}</h3>
             <button type="button" onclick="closeEssayModal()"
                 class="text-gray-400 hover:text-gray-600 transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -274,38 +280,30 @@
         <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200 bg-gray-50">
             <button type="button" onclick="closeEssayModal()"
                 class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                Close
+                {{ __('Close') }}
             </button>
         </div>
     </div>
 </div>
 
-<x-toast />
-
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-@if(session('success'))
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        text: '{{ session('success') }}',
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        customClass: {
-            popup: 'colored-toast'
-        }
-    });
-});
+window.applicationTranslations = {
+    approveTitle: @js(__("Approve Application?")),
+    approveHtml: @js(__("Are you sure you want to approve :name's application?", ['name' => ':name'])),
+    approveConfirm: @js(__("Yes, Approve!")),
+    rejectTitle: @js(__("Reject Application?")),
+    rejectHtml: @js(__("Are you sure you want to reject :name's application?", ['name' => ':name'])),
+    rejectNote: @js(__("This action can be reversed later.")),
+    rejectConfirm: @js(__("Yes, Reject")),
+    cancel: @js(__("Cancel")),
+    successTitle: @js(__("Success!")),
+};
 </script>
-@endif
 
 <script>
+const translations = window.applicationTranslations || {};
 function toggleDropdown(dropdownId, buttonElement) {
     event.stopPropagation();
 
@@ -394,14 +392,14 @@ document.addEventListener('keydown', function(event) {
 // SweetAlert Confirmation Functions
 function showApproveConfirmation(form, studentName) {
     Swal.fire({
-        title: 'Approve Application?',
-        html: `Are you sure you want to approve <strong>${studentName}'s</strong> application?`,
+        title: translations.approveTitle,
+        html: translations.approveHtml.replace(':name', `<strong>${studentName}</strong>`),
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#22c55e',
         cancelButtonColor: '#6b7280',
-        confirmButtonText: '<i class="fas fa-check"></i> Yes, Approve!',
-        cancelButtonText: '<i class="fas fa-times"></i> Cancel',
+        confirmButtonText: `<i class="fas fa-check"></i> ${translations.approveConfirm}`,
+        cancelButtonText: `<i class="fas fa-times"></i> ${translations.cancel}`,
         reverseButtons: true,
         customClass: {
             confirmButton: 'px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium',
@@ -417,14 +415,14 @@ function showApproveConfirmation(form, studentName) {
 
 function showRejectConfirmation(form, studentName) {
     Swal.fire({
-        title: 'Reject Application?',
-        html: `Are you sure you want to reject <strong>${studentName}'s</strong> application?<br><br><small class="text-gray-500">This action can be reversed later.</small>`,
+        title: translations.rejectTitle,
+        html: `${translations.rejectHtml.replace(':name', `<strong>${studentName}</strong>`)}<br><br><small class="text-gray-500">${translations.rejectNote}</small>`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#ef4444',
         cancelButtonColor: '#6b7280',
-        confirmButtonText: '<i class="fas fa-times"></i> Yes, Reject',
-        cancelButtonText: '<i class="fas fa-ban"></i> Cancel',
+        confirmButtonText: `<i class="fas fa-times"></i> ${translations.rejectConfirm}`,
+        cancelButtonText: `<i class="fas fa-ban"></i> ${translations.cancel}`,
         reverseButtons: true,
         customClass: {
             confirmButton: 'px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium',

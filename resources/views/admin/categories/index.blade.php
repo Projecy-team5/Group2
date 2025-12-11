@@ -5,7 +5,7 @@
         <div class="space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-4">
                 <div class="flex-1 min-w-[220px]">
-                    <h1 class="text-3xl font-bold text-gray-900">Article Categories</h1>
+                    <h1 class="text-xl font-bold text-gray-900">{{ __('Article Categories') }}</h1>
                 </div>
                 <div class="space-x-2 mt-3">
                     <a href="{{ route('admin.categories.create') }}"
@@ -16,7 +16,7 @@
                             <path d="M5 12h14"></path>
                             <path d="M12 5v14"></path>
                         </svg>
-                        New Category
+                        {{ __('New Category') }}
                     </a>
                 </div>
             </div>
@@ -38,19 +38,19 @@
                             <tr class="border-b transition-colors">
                                 <th
                                     class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                    Category</th>
+                                    {{ __('Category') }}</th>
                                 <th
                                     class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                    Slug</th>
+                                    {{ __('Slug') }}</th>
                                 <th
                                     class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                    Articles</th>
+                                    {{ __('Articles') }}</th>
                                 <th
                                     class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                    Updated</th>
+                                    {{ __('Updated') }}</th>
                                 <th
                                     class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 w-[160px]">
-                                    Actions</th>
+                                    {{ __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="[&_tr:last-child]:border-0">
@@ -93,7 +93,8 @@
                                     <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
                                         <span
                                             class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium text-indigo-700 border-indigo-200 bg-indigo-50">
-                                            {{ $category->articles_count ?? $category->articles->count() }} articles
+                                            {{ $category->articles_count ?? $category->articles->count() }}
+                                            {{ __('articles') }}
                                         </span>
                                     </td>
                                     <td class="p-4 align-middle [&:has([role=checkbox])]:pr-0">
@@ -134,7 +135,7 @@
                                                             <path d="M12 16v.01" />
                                                             <path d="M12 8v4" />
                                                         </svg>
-                                                        View details
+                                                        {{ __('View details') }}
                                                     </a>
                                                     <a href="{{ route('admin.categories.edit', $category) }}"
                                                         class="flex items-center px-4 py-2 text-sm text-gray-700 transition hover:bg-blue-50 hover:text-blue-700">
@@ -145,7 +146,7 @@
                                                             <path d="M12 20h9" />
                                                             <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
                                                         </svg>
-                                                        Edit category
+                                                        {{ __('Edit category') }}
                                                     </a>
                                                     <form action="{{ route('admin.categories.destroy', $category) }}"
                                                         method="POST"
@@ -163,7 +164,7 @@
                                                                 <path
                                                                     d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                                                             </svg>
-                                                            Delete
+                                                            {{ __('Delete') }}
                                                         </button>
                                                     </form>
                                                 </div>
@@ -174,7 +175,7 @@
                             @empty
                                 <tr>
                                     <td colspan="5" class="p-6 text-center text-sm text-gray-500">
-                                        No categories yet. Create the first one!
+                                        {{ __('No categories yet. Create the first one!') }}
                                     </td>
                                 </tr>
                             @endforelse

@@ -1,10 +1,11 @@
 @extends('layouts.dashboard')
+@section('title', __('Users Management'))
 @section('content')
     <div class="p-6 pt-0">
         <div class="space-y-4">
             <div class="flex items-center py-2 justify-between gap-4">
                 <div class="flex items-center gap-4 flex-1">
-                    <h1 class="text-3xl font-bold text-gray-900">Users Management</h1>
+                    <h1 class="text-xl font-bold text-gray-900">{{ __('Users Management') }}</h1>
                 </div>
                 <div class="space-x-2">
                     <a href="{{ route('admin.users.create') }}"
@@ -15,17 +16,17 @@
                             <path d="M5 12h14"></path>
                             <path d="M12 5v14"></path>
                         </svg>
-                        Add User
+                        {{ __('Add User') }}
                     </a>
                 </div>
             </div>
             <div class="bg-gray-50 rounded-lg p-4 border border-[#b8bbc0]">
                 <form method="GET" action="{{ route('admin.users.index') }}" class="flex flex-wrap gap-4 items-end">
                     <div class="flex-1 min-w-[200px]">
-                        <label for="search" class="block text-sm font-medium text-gray-700 mb-2">Search by Name</label>
+                        <label for="search" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Search by Name') }}</label>
                         <div class="relative">
                             <input type="text" name="search" id="search" value="{{ request('search') }}"
-                                placeholder="Enter user name..."
+                                placeholder="{{ __('Enter user name...') }}"
                                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 absolute left-3 top-3 text-gray-400"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -35,7 +36,7 @@
                         </div>
                     </div>
                     <div class="flex-1 min-w-[200px]">
-                        <label for="created_at" class="block text-sm font-medium text-gray-700 mb-2">Created Date</label>
+                        <label for="created_at" class="block text-sm font-medium text-gray-700 mb-2">{{ __('Created Date') }}</label>
                         <input type="date" name="created_at" id="created_at" value="{{ request('created_at') }}"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm">
                     </div>
@@ -47,7 +48,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
-                            Filter
+                            {{ __('Filter') }}
                         </button>
                         <a href="{{ route('admin.users.index') }}"
                             class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white text-gray-700 shadow-sm hover:bg-gray-50 h-10 rounded-md px-4 text-sm">
@@ -56,7 +57,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
-                            Reset
+                            {{ __('Reset') }}
                         </a>
                     </div>
                 </form>
@@ -69,22 +70,22 @@
                         <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                ID</th>
+                                {{ __('ID') }}</th>
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                User</th>
+                                {{ __('User') }}</th>
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                Email</th>
+                                {{ __('Email') }}</th>
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                Role</th>
+                                {{ __('Role') }}</th>
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                Created</th>
+                                {{ __('Created') }}</th>
                             <th
                                 class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 w-[100px]">
-                                Actions</th>
+                                {{ __('Actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="[&_tr:last-child]:border-0">
@@ -192,7 +193,7 @@
                                                         <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                                                         <circle cx="12" cy="12" r="3"></circle>
                                                     </svg>
-                                                    View Details
+                                                    {{ __('View Details') }}
                                                 </a>
                                                 <a href="{{ route('admin.users.edit', $user) }}"
                                                     class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700">
@@ -206,7 +207,7 @@
                                                             d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z">
                                                         </path>
                                                     </svg>
-                                                    Edit User
+                                                    {{ __('Edit User') }}
                                                 </a>
                                                 <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
                                                     class="delete-form">
@@ -225,7 +226,7 @@
                                                             <path d="M3 6h18"></path>
                                                             <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                                                         </svg>
-                                                        Delete User
+                                                        {{ __('Delete User') }}
                                                     </button>
                                                 </form>
                                             </div>
@@ -243,8 +244,7 @@
                 <div
                     class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white px-4 py-3 border rounded-lg">
                     <div class="text-sm text-gray-700">
-                        <span>Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of {{ $users->total() }}
-                            results</span>
+                        <span>{{ __('Showing :from to :to of :total results', ['from' => $users->firstItem(), 'to' => $users->lastItem(), 'total' => $users->total()]) }}</span>
                     </div>
                     <div class="flex items-center space-x-2">
                         {{ $users->appends(request()->query())->links() }}
@@ -259,7 +259,7 @@
     <script>
     function toggleDropdown(dropdownId, buttonElement) {
         event.stopPropagation();
-        
+
         // Close all other dropdowns first
         document.querySelectorAll('[id^="dropdown-"]').forEach(dropdown => {
             if (dropdown.id !== dropdownId) {
@@ -267,21 +267,21 @@
                 dropdown.style.display = 'none';
             }
         });
-        
+
         // Get the clicked dropdown
         const dropdown = document.getElementById(dropdownId);
         const button = buttonElement || event.target.closest('button');
-        
+
         if (dropdown.classList.contains('hidden')) {
             // Position the dropdown
             const buttonRect = button.getBoundingClientRect();
             const dropdownWidth = 192; // w-48 = 12rem = 192px
             const dropdownHeight = 120; // Approximate height
-            
+
             // Calculate position
             let left = buttonRect.right - dropdownWidth;
             let top = buttonRect.bottom + 8;
-            
+
             // Adjust if dropdown would go off-screen
             if (left < 10) {
                 left = buttonRect.left;
@@ -289,7 +289,7 @@
             if (top + dropdownHeight > window.innerHeight - 10) {
                 top = buttonRect.top - dropdownHeight - 8;
             }
-            
+
             // Set position and show
             dropdown.style.left = left + 'px';
             dropdown.style.top = top + 'px';
@@ -304,9 +304,9 @@
 
     // Close dropdowns when clicking outside
     document.addEventListener('click', function(event) {
-        const isInsideDropdown = event.target.closest('[id^="dropdown-"]') || 
+        const isInsideDropdown = event.target.closest('[id^="dropdown-"]') ||
                                 event.target.closest('button[onclick*="toggleDropdown"]');
-        
+
         if (!isInsideDropdown) {
             document.querySelectorAll('[id^="dropdown-"]').forEach(dropdown => {
                 dropdown.classList.add('hidden');

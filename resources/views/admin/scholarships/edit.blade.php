@@ -22,10 +22,10 @@
                             <path
                                 d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
                         </svg>
-                        Scholarship Information
+                        {{__('Scholarship Information')}}
                     </h2>
-                    <p class="text-sm text-gray-600 mt-1">Update the scholarship details, requirements, and application
-                        information</p>
+                    <p class="text-sm text-gray-600 mt-1">{{__('Update the scholarship details, requirements, and application
+                        information')}}</p>
                 </div>
 
                 <form action="{{ route('admin.scholarships.update', $scholarship) }}" method="POST"
@@ -45,7 +45,7 @@
                                     <path d="M2 17l10 5 10-5" />
                                     <path d="M2 12l10 5 10-5" />
                                 </svg>
-                                Scholarship Name
+                                {{ __('Scholarship Name') }}
                             </label>
                             <div class="relative">
                                 <input type="text" name="scholarship_name" id="scholarship_name"
@@ -85,7 +85,7 @@
                                         <line x1="12" y1="1" x2="12" y2="23" />
                                         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                                     </svg>
-                                    Award Amount
+                                   {{__('Award Amount')}}
                                 </label>
                                 <div class="relative">
                                     <input type="number" name="award_amount" id="award_amount"
@@ -123,7 +123,7 @@
                                         <path d="M8 12h8" />
                                         <path d="M12 8v8" />
                                     </svg>
-                                    Country
+                                    {{__('Country')}}
                                 </label>
                                 <div class="relative">
                                     <input type="text" name="country" id="country"
@@ -163,7 +163,7 @@
                                         <line x1="8" y1="2" x2="8" y2="6" />
                                         <line x1="3" y1="10" x2="21" y2="10" />
                                     </svg>
-                                    Application Deadline
+                                    {{__('Application Deadline')}}
                                 </label>
                                 <div class="relative">
                                     <input type="text" name="application_deadline" id="application_deadline"
@@ -205,20 +205,20 @@
                                     <circle cx="12" cy="12" r="10" />
                                     <path d="M9 12l2 2 4-4" />
                                 </svg>
-                                Status
+                                {{__('Status')}}
                             </label>
                             <div class="relative">
                                 <select name="status" id="status"
                                     class="block w-full pl-10 pr-8 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 focus:bg-white"
                                     required>
                                     <option value="active"
-                                        {{ old('status', $scholarship->status) == 'active' ? 'selected' : '' }}>Active
+                                        {{ old('status', $scholarship->status) == 'active' ? 'selected' : '' }}>{{__('Active')}}
                                     </option>
                                     <option value="inactive"
-                                        {{ old('status', $scholarship->status) == 'inactive' ? 'selected' : '' }}>Inactive
+                                        {{ old('status', $scholarship->status) == 'inactive' ? 'selected' : '' }}>{{__('Inactive')}}
                                     </option>
                                     <option value="closed"
-                                        {{ old('status', $scholarship->status) == 'closed' ? 'selected' : '' }}>Closed
+                                        {{ old('status', $scholarship->status) == 'closed' ? 'selected' : '' }}>{{__('Closed')}}
                                     </option>
                                 </select>
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -252,7 +252,7 @@
                                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                                     <path d="M22 4L12 14.01l-3-3" />
                                 </svg>
-                                Eligibility Criteria
+                            {{__('Eligibility Criteria')}}
                             </label>
                             <textarea name="eligibility_criteria" id="eligibility_criteria" rows="4"
                                 class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 focus:bg-white"
@@ -281,7 +281,7 @@
                                     <line x1="16" y1="17" x2="8" y2="17" />
                                     <line x1="10" y1="9" x2="8" y2="9" />
                                 </svg>
-                                Application Description
+                                {{__('Application Description')}}
                             </label>
                             <textarea name="application_description" id="application_description" rows="4"
                                 class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 focus:bg-white"
@@ -310,7 +310,7 @@
                                         <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3" />
                                         <path d="M3 12v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6" />
                                     </svg>
-                                    Application Requirements
+                                   {{__('Application Requirements')}}
                                 </label>
                                 <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
                                     <div id="requirements-container" class="space-y-3">
@@ -477,7 +477,7 @@
                     <div class="flex justify-end gap-3 pt-6 border-t border-gray-200 mt-8">
                         <a href="{{ route('admin.scholarships.index') }}"
                             class="px-6 py-3 border border-gray-300 bg-white text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition">
-                            Cancel
+                           {{__('Cancel')}}
                         </a>
                         <button type="submit" id="submit-btn"
                             class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-sm hover:shadow-md transition flex items-center gap-2">
@@ -488,7 +488,7 @@
                                 <polyline points="17,21 17,13 7,13 7,21" />
                                 <polyline points="7,3 7,8 15,8" />
                             </svg>
-                            Update Scholarship
+                            {{__('Update Scholarship')}}
                         </button>
                     </div>
                 </form>
